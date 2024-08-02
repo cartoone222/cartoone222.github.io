@@ -1,0 +1,76 @@
+body {
+    background-color: #111111;
+}
+
+.top {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    margin:-10px;
+}
+
+.meunu {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    margin:-10px;
+}
+
+.meunu p {
+    margin-left: 20px;
+    margin-right: 20px;
+    font: 2em "Arial";
+    color: white;
+    padding:10px;
+    border-bottom: 2px solid black;
+}
+
+.meunu p::after {
+    content: "";
+
+    display: block;
+    height: 0.1em;
+    background-color: green;
+
+    transform: scale(0);
+    transition: transform 0.5s;
+}
+
+.meunu p:hover::after {
+    transform: scale(1);
+    transform-origin: left;
+}
+
+.meunu p:hover {
+    transition-duration: 0.5s;
+    cursor: pointer;
+    color: green;
+}
+
+.titre {
+    font: 5em "Arial";
+    color: white;
+}
+
+.titre:hover {
+    cursor: default;
+}
+
+.main {
+    background-color: #111111;
+    color:white;
+    margin:-10px;
+    padding: 10px;
+    padding-left: 25%;
+    padding-right: 25%;
+}
+
+.text {
+    margin: auto;
+    text-align: justify;
+    font: 1.25em "Arial";
+}
