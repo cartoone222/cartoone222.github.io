@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <script src="spawn_text.js"></script> 
+    </head>
+    <body>
+        <div class="top">
+            <strong><h1 class="titre">Le blog de Cartoone</h1></strong>
+        </div>
+        <div class="meunu">
+            ̼<p id="home_btn">home</p>
+            <p id="aboutme_btn">about-me</p>
+            <p id="article_btn">article</p>
+            <script>
+                const home_btn = document.getElementById("home_btn");
+                home_btn.addEventListener("click", (event) => {open(window.location.host + "index.html","_self")})
+
+                const about_me = document.getElementById("aboutme_btn");
+                about_me.addEventListener("click", (event) => {open(window.location.host + "about-me.html","_self")})
+            </script>
+        </div>
+        <div class="main">
+            <div class="text">
+                <p class="spawn">Le hacking est initialement la bidouille et l’expérimentation, dont les motivations sont notamment la passion, le jeu, le plaisir, l’échange, le besoin et le partage. (wikipedia)</p>
+            </div>
+        </div>
+    </body>
+</html>
