@@ -1,0 +1,21 @@
+.mosaique_platforme {
+    display: flex;
+    align-items: center;
+}
+
+.tile {
+    height: 15%;
+    width: 15%;
+}
+
+.tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 50%;
+    transition-duration: 1s;
+}
+
+.tile img:hover {
+    opacity: 100%;
+}

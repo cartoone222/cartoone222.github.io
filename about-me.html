@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style/style.css">
+        <link rel="stylesheet" href="style/about-me.css">
+        <script src="script/spawn_text.js"></script> 
+    </head>
+    <body>
+        <div class="top">
+            <strong><h1 class="titre">Le blog de Cartoone</h1></strong>
+        </div>
+        <div class="meunu">
+            ̼<p id="home_btn">home</p>
+            <p id="aboutme_btn">about-me</p>
+            <p id="article_btn">article</p>
+            <script>
+                const home_btn = document.getElementById("home_btn");
+                home_btn.addEventListener("click", (event) => {open("/index.html","_self")})
+
+                const about_me = document.getElementById("aboutme_btn");
+                about_me.addEventListener("click", (event) => {open("/about-me.html","_self")})
+            </script>
+        </div>
+        <div class="main">
+            <div style="display: flex; margin-top: 2%;">
+                <div>
+                    <img src="https://www.root-me.org/IMG/logo/auton495184.png?1665665293" height="200" width="200" style="border-radius: 10px;">
+                </div>
+                <div class="text" style="margin-left: 10px;">
+                    <p class="spawn">Bonjour, j'ai 18 ans et je suis un jeune passionné d'informatique dans tous ses aspects, 
+                        aussi bien de l'électronique que ce qui est de l'ordre de l'algorithmique. 
+                        Mais surtout la sécurité informatique. J'ai eu l'occasion ces dernières années de faire pas mal de CTF
+                         (Capture The Flag) et je me concentre en ce moment sur les challenges hardware, radio, réseaux et reverse.
+                          Pour ce qui des études, je suis actuellement en fin de terminal.
+                    </p>
+                </div>
+            </div>
+            <div class="text">
+                <h3 style="margin-left: 2%;">Résultats en compétition :</h3>
+                <ul style="margin-left: 2%;">
+                    <li><p class="spawn">Algoréa 2022 Demi-finale.</p></li>
+                    <li><p class="spawn">CSAW'22 Finaliste dans l'équipe ret C2lhut.</p></li>
+                    <li><p class="spawn">Algoréa 2023 Demi-finale.</p></li>
+                    <li><p class="spawn">NBCTF 2023 5ème dans l'équipe noname.exe.</p></li>
+                    <li><p class="spawn">FCSC 2023 13ème catégorie junior.</p></li>
+                    <li><p class="spawn">CSAW'23 2ème 🥈 dans l'équipe ret C2lhut.</p></li>
+                    <li><p class="spawn">NBCTF 2024 1er 🥇 dans l'équipe /Flag excepti0n.</p></li>
+                    <li><p class="spawn">FCSC 2024 11ème catégorie junior (2ème 🥈 hardwear).</p></li>
+                </ul>
+                <h3 style="margin-left: 2%;">Plateformes de CTF (et autres) :</h3>
+                <div class="mosaique_platforme">
+                    <div class="tile" onclick="window.open('https://www.root-me.org/cartoone-222', '_blank')">
+                        <img src="img/rootme.png">
+                    </div>
+                    <div class="tile" onclick="window.open('https://tryhackme.com/p/cartoone', '_blank')">
+                        <img src="img/tryhackme.svg">
+                    </div>
+                    <div class="tile" onclick="window.open('https://github.com/cartoone222', '_blank')">
+                        <img src="img/github.png" style="margin-left: 8%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
