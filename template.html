@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style/style.css">
+        <script src="script/spawn_text.js"></script> 
+    </head>
+    <body>
+        <div class="top">
+            <strong><h1 class="titre">Le blog de Cartoone</h1></strong>
+        </div>
+        <div class="meunu">
+            ̼<p id="home_btn">home</p>
+            <p id="aboutme_btn">about-me</p>
+            <p id="article_btn">article</p>
+            <script>
+                const home_btn = document.getElementById("home_btn");
+                home_btn.addEventListener("click", (event) => {open("/index.html","_self")})
+
+                const about_me = document.getElementById("aboutme_btn");
+                about_me.addEventListener("click", (event) => {open("/about-me.html","_self")})
+            </script>
+        </div>
+
+        <div class="main">
+            <div class="text">
+                <p class="spawn"></p>
+            </div>
+        </div>
+        
+    </body>
+</html>
