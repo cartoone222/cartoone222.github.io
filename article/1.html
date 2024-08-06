@@ -24,8 +24,18 @@
         <div class="main">
             <div class="text">
                 <p class="spawn">Dans cet article, je vais revenir sur le Noobz CTF pour faire un bilan de ma performance. Pour ce qui est du contexte, ce CTF avait lieu le week-end sur 48h. J'ai pu dégager un temps limité pour le réaliser, cependant j'ai quand même pu faire pas mal de choses. De plus, j'ai eu l'aide de baguetteman pour la crypto, pour les autres catégories j'étais seul. Pour ce qui est des résultats, je finis 217ème au général sur un peu moins de 1000 et dans la catégorie lycéen (pour une de mes dernières participations dans la catégorie), je fais 41ème sur 180 participants. Ces résultats sont corrects dans la mesure où je n'ai pas pu libérer autant de temps que voulu et que cette compétition était internationale. J'ai bien aimé les différents challenges, ils étaient variés et originaux. Je vais maintenant revenir sur les différents challenges.</p>
+                <br>
+                <h1 class="spawn">Cryptographie</h1>
+                <br>
+                <p class="spawn">Commençons par la cryptographie. Comme je l'ai mentionné précédemment, j'ai eu l'aide de baguetteman pour cette catégorie. Les challenges étaient assez classiques et pas trop ardus. Voici un résumé de chaque challenge :</p>
+                <br>
+                <p class="spawn">Vinegar : décoder un Vigenère avec une clé connue, rien de plus simple.</p>
+                <p class="spawn">Vinegar 2 : décoder un Vigenère avec une clé que l'on peut retrouver dans un code source. La clé est alphanumérique, ce qui ne rend pas le challenge plus difficile.</p>
+                <p class="spawn">Random : dans ce challenge, on nous demande de donner une chaîne de caractères qui sera mélangée par une fonction aléatoire. La faille réside dans le fait que la seed est toujours la même, ce qui permet de savoir quels caractères seront permutés avec quels autres.</p>
+                <p class="spawn">RSA : dans ce challenge, on nous donne des paramètres RSA et on nous demande de retrouver le message. Il y a deux failles : le modulo utilisé est plus grand que le message, et la puissance à laquelle est élevé le message est très faible. On peut donc décoder le message en utilisant une fonction racine.</p>
+                <br>
+                <p class="spawn">Ce n'était pas la catégorie la plus intéressante de ce CTF, mais un petit effort d'une heure était largement suffisant pour en venir à bout et encore.</p>
             </div>
-        </div>
-        
+        </div> 
     </body>
 </html>
