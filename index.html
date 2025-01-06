@@ -3,6 +3,25 @@
     <head>
         <link rel="stylesheet" href="style/style.css">
         <script src="script/spawn_text.js"></script> 
+
+        <style>
+        .blog-box {
+            background-color: rgba(73, 19, 19, 0.616); /* Rouge légèrement transparent */
+            border-radius: 8px;
+        }
+        .blog-box header {
+            background-color: rgb(73, 19, 19); /* Rouge */
+            border-radius: 8px 8px 0 0;
+        }
+        .blog-box main {
+            padding-top: 0px; /* Espace en haut */
+            padding-bottom: 10px; /* Espace en bas */
+        }
+        .blog-box .article {
+            margin: 10px;
+            padding: 0px;
+        }
+        </style>
     </head>
     <body>
         <div class="top">
@@ -24,6 +43,29 @@
         <div class="main">
             <div class="text">
                 <p class="spawn">Le hacking est initialement la bidouille et l’expérimentation, dont les motivations sont notamment la passion, le jeu, le plaisir, l’échange, le besoin et le partage. (wikipedia)</p>
+            
+                <div class="blog-box">
+                    <header>
+                        <h2>Derniers Articles</h2>
+                    </header>
+                    <main>
+                        <div class="bouton">
+                            <div class="article">
+                                <p id="article1">CTF PROLOGIN 2024-2025 Partie 1</p>
+                            </div>
+                            <!-- <div class="article">
+                                <p>Titre de l'Article 2</p>
+                            </div>
+                            <div class="article">
+                                <p>Titre de l'Article 3</p>
+                            </div> -->
+                            <script>
+                                const article1 = document.getElementById("article1");
+                                article1.addEventListener("click", (event) => {open("/article/1.html","_self")})
+                            </script>
+                        </div>
+                    </main>
+                </div>
             </div>
         </div>
         

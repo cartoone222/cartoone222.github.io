@@ -101,3 +101,31 @@ body {
     color: #abb2bf;
     font: 1em 'Courier New';
 }
+
+.bouton p{
+    display: inline-block;
+    margin:10px;
+    text-indent: 0em;
+}
+
+.bouton p::after {
+    content: "";
+
+    display: block;
+    height: 0.1em;
+    background-color: green;
+
+    transform: scale(0);
+    transition: transform 0.5s;
+}
+
+.bouton p:hover::after {
+    transform: scale(1);
+    transform-origin: left;
+}
+
+.bouton p:hover {
+    transition-duration: 0.5s;
+    cursor: pointer;
+    color: green;
+}
