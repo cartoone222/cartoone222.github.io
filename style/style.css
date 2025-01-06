@@ -74,4 +74,30 @@ body {
     text-align: justify;
     font: 1.25em "Arial";
     text-indent: 1em;
+    line-height: 1.4;
+}
+
+.text h3{
+    color: green;
+    text-decoration: underline; 
+    text-decoration-color: green;
+    text-decoration-thickness: 3px; /* Épaisseur du soulignement */
+    text-underline-offset: 5px; /* Éloignement du soulignement */
+}
+
+.img_container_center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text .highlight_part{
+    background-color: #282c34;
+    border:solid #282c34;
+    border-radius: 5px;
+    text-indent: 0em;
+    padding:5px;
+    word-break: break-word;
+    color: #abb2bf;
+    font: 1em 'Courier New';
 }

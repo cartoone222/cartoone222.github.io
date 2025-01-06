@@ -3,6 +3,24 @@
     <head>
         <link rel="stylesheet" href="../style/style.css">
         <script src="../script/spawn_text.js"></script> 
+
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/atom-one-dark.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+        <style>
+            pre code.hljs {
+                border-radius: 10px;
+                text-indent: 0em;
+            }
+            
+            .img1{
+                max-width: 50%;
+                height: auto;
+            }
+        </style>
+
     </head>
     <body>
         <div class="top">
@@ -22,7 +40,82 @@
         </div>
 
         <div class="main">
-            <p></p>
+            <div class="text">
+                <h2>CTF PROLOGIN 2024-2025 Partie 1</h2>
+                <h3>Partie 1 stéganographie</h3>
+
+                <p>Pour ce challenge, on nous donne dans l'énoncé une partie d'un code Python :</p>
+                
+                <pre><code class="python">from random import randint
+message = ""
+for iterateur in (cle_instagram, cle_twitter, cle_discord):
+    for elt in iterateur():
+        message += "?"
+        cle = None
+        while cle != 0x42:
+            message = message[:-1]
+            cle = randint(0, 10000)
+            message += chr(elt ^ (cle & 0xff))
+            print(message)</code></pre>
+
+                <p>On peut faire plusieurs remarques sur ce code :</p>
+                <ul>
+                    <li>Il y a manifestement des données manquantes, les clés Twitter, Instagram et Discord.</li>
+                    <li>Si la clé est différente de 0x42, un message est généré aléatoirement.</li>
+                </ul>
+                <p>Après un peu de recherche sur les réseaux, j'ai remarqué dans l'arrière-plan des poste qui annoncer l'ouverture des qualification les donner manquant légèrement flouter, mais toujours lisible dans la mesure où on connaît leurs valeurs possibles (ce sont des chaînes hexadécimales.) par exemple l'image discorde.</p>
+
+                <div class="img_container_center"><img src="../img/Discord_rec.webp" class="img1"></div>
+
+                <p>Donc on plis les yeux et on trouve :</p>
+                <p class="highlight_part">0e2362242b2e2e2762262762082d3127322a620F2338212a232c266E622c2d2f2f27276208372e2b236e622362302721272f2f272c36622130272762372c62212d2f323627621121302336212a622362312d2c622c2d2f626a212331312762212a232f272337622a233736276b</p>
+                
+                <p>On le XOR avec 0x42 la clef qu'on a déduit du code :</p>
+                <p class="highlight_part">La fille de Joseph Mazchand, nommee Julia, a recemment cree un compte Scratch a son nom (casse chameau haute)</p>
+                
+                <p>L'étape suivent et de vérifier comment on peut trouver un utilisateur scratche après un peu de recherche, on trouve que les profils respecte la forme.</p>
+                <p class="highlight_part">https://scratch.mit.edu/users/%username%/</p>
+                
+                <p>On test donc https://scratch.mit.edu/users/JuliaMazchand/ mais cela ne donnent rien, mais le "z" me posait problème donc j'ai testé de l'enlève et la bingo ! On trouve la page https://scratch.mit.edu/users/JuliaMachand/ et dans la description du jeux mis en avent, on trouve le Flag : </p>
+                <p class="highlight_part"><strong>PROLOGIN{Ils_sont_flous_ces_romains!}</strong></p>
+
+                <h3>Partie 2 rev</h3>
+
+                <p>Dans cette partie, on doit faire en sorte de récupérer le flag dans un jeux de Nim en scratch une première approche que j'ai essayé est de patches les variable pendent l'exécution du projet avec les outils de l'éditeur et en patchant les sécurité en changent les condition, mais le flag ne ressembler toujours a rien je suis donc passer a une méthode plus radicale j'ai transpilers le code scratch en python. En utilisant le scripte suivent : https://github.com/BirdLogics/sb3topy</p>
+
+                <p>Ce qui nous permet de récupérer un code, on l'analyse et on trouve une fonction qui est déchiffrée un mot de passe et une fois constent extraite et le code un peu corriger, on obtient ce code :</p>
+
+                <pre><code class="python">var_LAphabet = "_8z0+0%)^He#xqFhsP'fpk!tKd-(5@\"g1< &XuLAI,/i>9|T2=EVN4Z?S{BQRv\\7;c}3walny]YDGWor*Jm$[U.OC~:M`6jb"
+
+list_MEssages = []
+
+list_MEssages.append(7)
+list_MEssages.append(50)
+list_MEssages.append(77)
+(...)
+list_MEssages.append(13)
+list_MEssages.append(69)
+
+var_TAntpis = ""
+for _ in range(len(list_MEssages)):
+    try:
+        print(var_LAphabet[int(list_MEssages[_]) % len(var_LAphabet)], end="")
+    except:
+        pass
+        
+print(var_TAntpis)</code></pre>
+
+                    <p>Donc, pour résumer, on a un alphabet et la fonction parcourt une liste est vas chercher la lettre à cet indice. Malheureusement, le résultat ne donne rien d'intelligible.</p>
+
+                    <p>J'ai donc entrepris de noter les indices des lettres PRO, c'est le début du format du flag et je trouve : 17,60,87 ce qui correspond au indice des caractères dans message plus 10.</p>
+
+                    <p>On obtient le résultat suivant : PROLOGIN{Ge_de_miN!}rand_Maitr</p>
+
+                    <p>Avec un peu de guesse on le remet dans l'ordre est on obtient :</p>
+
+                    <p class="highlight_part">PROLOGIN{Grand_Maitre_de_Nim!}</p>
+
+            </div>
         </div> 
     </body>
 </html>
