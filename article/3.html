@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../style/style.css">
+
+        <title>FCSC 2024 Virtual SPInash</title>
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/atom-one-dark.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+        <style>
+            pre code.hljs {
+                border-radius: 10px;
+                text-indent: 0em;
+            }
+
+            table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            }
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+            }
+
+            .img_spin{
+                max-width: 48%;
+                height: auto;
+            }
+
+            .meme_1{
+                max-width: 500%;
+                height: auto;
+            }
+
+            .img_spin_2{
+                max-width: 100%;
+                height: auto;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="top">
+            <strong><h1 class="titre">Le blog de Cartoone</h1></strong>
+        </div>
+        <div class="meunu">
+            ̼<p id="home_btn">home</p>
+            <p id="aboutme_btn">about-me</p>
+            <p id="article_btn">article</p>
+            <script>
+                const home_btn = document.getElementById("home_btn");
+                home_btn.addEventListener("click", (event) => {open("/index.html","_self")})
+
+                const about_me = document.getElementById("aboutme_btn");
+                about_me.addEventListener("click", (event) => {open("/about-me.html","_self")})
+
+                const article_btn = document.getElementById("article_btn");
+                article_btn.addEventListener("click", (event) => {open("/search-article.html","_self")})
+            </script>
+        </div>
+
+        <div class="main">
+            <div class="text">
+
+                <h2>FCSC 2024 Virtual SPInash</h2>
+
+                <div class="img_container_center">
+                    <img src="../img/en_tete.png">
+                </div>
+
+                <p>Pour résoudre ce challenge, on dispose de 3 éléments :</p>
+
+                <ul>
+                    <li>deux images, qui correspondent aux 2 faces d'un circuit imprimé</li>
+                    <li>un accès à un port série virtuelle</li>
+                </ul>
+
+                <p>On commence par se connecter au port série. On obtient ce résultat :</p>
+
+                <pre><p class="highlight_part">MicroPython v1.22.2 on 1980-01-01; Mysterious FCSC board with STM32F405RG
+Type "help()" for more information.
+>>> </p></pre>
+
+                <p>On constate donc qu'on est sur un microcontroleur STM32F405RG qui tourne sous Micropython.</p>
+
+                <p>On a aussi les deux images du PCB : </p>
+
+                <div class="img_container_center">
+                    <img src="../img/virtual-spinash.jpg" class="img_spin">
+                    <img src="../img/virtual-spinash_back.jpg" class="img_spin">
+                </div>
+
+                <p>On a deux puces montées en surface, quelque condensateurs, un quartz, un bouton, un port série, et 10 fiches mâles... rien de bien extravagant !!</p>
+                
+                <p>On a identifié le micro-contrôleur. Pour la deuxième puce, on a une référence IS25LP080D.  Après recherche, c'est une mémoire flash qui communique en série.</p> 
+                
+                <p>Première étape, on récupère les Data Sheets pour avoir le pin out de la mémoire : </p>
+
+                <div class="img_container_center">
+                    <img src="../img/memoire.png" class="img_spin">
+                </div>
+
+                <p>Voici un tableau qui explique les acronymes :</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PIN</th>
+                            <th>Fonction</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Vcc</td>
+                            <td>alimentation +</td>
+                        </tr>
+                        <tr>
+                            <td>GND</td>
+                            <td>alimentation -</td>
+                        </tr>
+                        <tr>
+                            <td>WP#</td>
+                            <td>protection en écriture</td>
+                        </tr>
+                        <tr>
+                            <td>SCK</td>
+                            <td>signal d'horloge</td>
+                        </tr>
+                        <tr>
+                            <td>CE#</td>
+                            <td>chip enable</td>
+                        </tr>
+                        <tr>
+                            <td>HOLD#</td>
+                            <td>non cabler</td>
+                        </tr>
+                        <tr>
+                            <td>SO</td>
+                            <td>signal output</td>
+                        </tr>
+                        <tr>
+                            <td>SI</td>
+                            <td>signal input</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>On peut identifier le sens des composants avec la flèche blanche qui pointe la broche 1. </p>
+
+                <p>On va maintenant chercher à identifier quelles broches du micro contrôleur sont connectées à quelles broches de la mémoire flash.</p>
+                
+                <div class="img_container_center">
+                    <img src="../img/meme_FCSC_1.png" class="meme_1">
+                </div>
+
+                <br>
+
+                <div class="img_container_center">
+                    <img src="../img/virtual-spinash-analyse.jpg" class="img_spin_2">
+                </div>
+
+                <p>Dans la mesure où les pins du micro-contrôleur sont numérotées dans le sens inverse des aiguilles d'une montre, on a les correspondances suivantes :</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PIN mémoire</th>
+                            <th>PIN microcontrôleur</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SCK</td>
+                            <td>34</td>
+                        </tr>
+                        <tr>
+                            <td>SI/SO</td>
+                            <td>35/36</td>
+                        </tr>
+                        <tr>
+                            <td>CE</td>
+                            <td>33</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>On va maintenant regarder le PIN out du micro-contrôleur.</p>
+
+                <div class="img_container_center">
+                    <img src="../img/FCSC_Spin_Micro.png" class="img_spin_2">
+                </div>
+
+                <p>On constate que la mémoire est branchée sur l'interface SPI-2. (Serial Peripheral Interface)</p>
+
+                <p>On passe maintenant à l'exploitation.</p>
+                <p>On va écrire un code Python pour lire la mémoire :</p>
+
+                <pre><code class="python">from machine import Pin, SPI
+
+spi2 = SPI(2, baudrate=10000000)
+
+cs = Pin("PB12", Pin.OUT)
+cs.value(0)
+
+spi2.write(b'\x03') # commande de lecture
+spi2.write(bytearray([(0 >> 16) & 0xFF, (0 >> 8) & 0xFF, 0 & 0xFF]))
+data = bytearray(1024)
+spi2.readinto(data)
+
+print(data)</code></pre>
+
+                <p>et on obtient le flag qui est donc :</p>
+
+                <p class="highlight_part">FCSC{a8937c95944625276140d65539299e81e179ec2293417010817a7a595fca987f}</p>
+            </div>
+        </div> 
+    </body>
+</html>
