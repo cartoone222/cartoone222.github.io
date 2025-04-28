@@ -51,11 +51,11 @@
 
                 <p>On commence par télécharger le fichier, de plus on en profite pour se procurer la documentation de la norme DisplayPort 1.2.</p>
 
-                <p>Un premier tour sur la page Wikipédia du standard DisplayPort ([https://fr.wikipedia.org/wiki/DisplayPort](https://fr.wikipedia.org/wiki/DisplayPort)) nous apprend que la broche 3 appartient à la ligne différentielle 0 et qu'elle correspond au signal négatif de la paire. On va donc commencer par l'inverser en créant un fichier "NotDisplayPort.bin" avec la commande suivante :</p>
+                <p>Un premier tour sur la page Wikipédia du standard DisplayPort (https://fr.wikipedia.org/wiki/DisplayPort) nous apprend que la broche 3 appartient à la ligne différentielle 0 et qu'elle correspond au signal négatif de la paire. On va donc commencer par l'inverser en créant un fichier "NotDisplayPort.bin" avec la commande suivante :</p>
 
 <p class="highlight_part">xxd -p -c 1 DisplayPort.bin | sed 's/\(..\)/\1 /g' | while read byte; do printf "%02X" $(( 0x$byte ^ 0xFF )); done | xxd -r -p > NotDisplayPort.bin</p>
 
-                <p>Grâce à elle, on comprend assez vite que la première étape sera de réussir à décoder selon l'encodage 8b/10b ([https://en.wikipedia.org/wiki/8b/10b_encoding](https://en.wikipedia.org/wiki/8b/10b_encoding)). On commence donc avec un script pour tester plusieurs configurations sur les 100 000 premiers bits. Après quelques ajustements, on réussit à décoder les bits avec cette configuration. On notera qu'on utilise cette bibliothèque Python : [https://github.com/olagrottvik/encdec8b10b](https://github.com/olagrottvik/encdec8b10b).</p>
+                <p>Grâce à elle, on comprend assez vite que la première étape sera de réussir à décoder selon l'encodage 8b/10b (https://en.wikipedia.org/wiki/8b/10b_encoding). On commence donc avec un script pour tester plusieurs configurations sur les 100 000 premiers bits. Après quelques ajustements, on réussit à décoder les bits avec cette configuration. On notera qu'on utilise cette bibliothèque Python : [https://github.com/olagrottvik/encdec8b10b](https://github.com/olagrottvik/encdec8b10b).</p>
 
 <pre><code class="python">from encdec8b10b import EncDec8B10B
 
@@ -193,9 +193,7 @@ class lfsr:
 
                 <p>Après, le registre du LFSR est XORé avec les données de pixels et de remplissage comme suit :</p>
 
-                <p>$${D'[7], D'[6], D'[5], D'[4], D'[3], D'[2], D'[1], D'[0]} = {D[7], D[6], D[5], D[4], D[3], D[2], D[1], D[0]} \oplus</p>
-
-                <p>{LFSR[8]. LFSR[9], LFSR[10], LFSR[11], LFSR[12], LFSR[13], LFSR[14, LFSR[15]}$$</p>
+                <p class="highlight_part">{D'[7], D'[6], D'[5], D'[4], D'[3], D'[2], D'[1], D'[0]} = {D[7], D[6], D[5], D[4], D[3], D[2], D[1], D[0]} ^ {LFSR[8]. LFSR[9], LFSR[10], LFSR[11], LFSR[12], LFSR[13], LFSR[14, LFSR[15]}</p>
 
                 <p>On modifie donc notre fonction de récupération de données :</p>
 
