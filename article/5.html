@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../style/style.css">
+
+        <title></title>
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/atom-one-dark.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+        <style>
+            pre code.hljs {
+                border-radius: 10px;
+                text-indent: 0em;
+            }
+            
+            .img1{
+                max-width: 33%;
+                height: auto;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="top">
+            <strong><h1 class="titre">Le blog de Cartoone</h1></strong>
+        </div>
+        <div class="meunu">
+            ̼<p id="home_btn">home</p>
+            <p id="aboutme_btn">about-me</p>
+            <p id="article_btn">article</p>
+            <script>
+                const home_btn = document.getElementById("home_btn");
+                home_btn.addEventListener("click", (event) => {open("/index.html","_self")})
+
+                const about_me = document.getElementById("aboutme_btn");
+                about_me.addEventListener("click", (event) => {open("/about-me.html","_self")})
+
+                const article_btn = document.getElementById("article_btn");
+                article_btn.addEventListener("click", (event) => {open("/search-article.html","_self")})
+            </script>
+        </div>
+
+        <div class="main">
+            <div class="text">
+                
+                <div class="img_container_center">
+                    <img src="../img/5/Pasted image 20250427163133.png">
+                </div>
+
+                <p>Pour ce challenge, j'ai choisi d'utiliser Shovel car je l'ai déjà testé.</p>
+
+                <p>On ouvre donc Shovel sur le pcap et on profite des tags par défaut qui incluent des tags spécifiques pour l'ECSC. On peut ainsi afficher toutes les communications où un flag a été détecté comme envoyé par le serveur.</p>
+
+                <p>Ma première idée a été d'utiliser cette règle "flag out" en remplaçant "alert" par "drop". Mais cela n'a pas fonctionné, ce qui est plutôt logique, car cela n'a pas beaucoup d'intérêt.</p>
+
+                <p>J'ai ensuite essayé de construire une règle un peu plus astucieuse en me basant sur le fait que j'avais vu que tous les leaks de flag se faisaient sur une route en particulier : /recycle/myitems/</p>
+
+<p class="highlight_part">drop http any any -> any any (metadata: tag DROP, color danger;flow:established,to_server; http.method;content:"GET"; http.uri; content:"/recycle/myitems/";sid:1000103;)</p>
+
+                <p>On va un peu détailler cette règle :</p>
+
+<p class="highlight_part">drop http any any -> any any </p>
+
+                <p>Permet d'indiquer que la règle va produire l'effet "drop", donc bloquer les paquets, qu'elle s'applique au protocole HTTP et qu'à ce stade, elle concerne toutes les communications.</p>
+
+<p class="highlight_part">metadata: tag DROP, color danger;</p>
+
+                <p>Permet de mettre un tag dans Shovel à partir de cette règle.</p>
+
+<p class="highlight_part">flow:established,to_server; http.method;content:"GET"; http.uri; content:"/recycle/myitems/";</p>
+
+                <p>On indique qu'on cherche à bloquer toutes les requêtes vers des URLs contenant "/recycle/myitems/".</p>
+
+<p class="highlight_part">sid:1000103;)</p>
+
+                <p>Cela indique un numéro de règle qui doit être unique.</p>
+
+                <p>Mais après avoir testé cette règle, le système de jeu m'a indiqué que ma règle bloquait du trafic légitime. Elle est donc trop restrictive.</p>
+
+                <p>En relisant attentivement le sujet de l'épreuve, je constate qu'il y a un lien en petit en bas que j'avais raté : </p>
+
+                <p>(https://github.com/ECSC2022/ctf-services/tree/main/dewaste). Après une lecture rapide mais appliquée de cette page, on comprend que l'une des failles qui affecte ce système est un problème de logique. Si l'argument token de la méthode GET est vide, je teste donc une règle dérivée de la première, mais qui vérifie que dans l'URL, il n'y a pas d'appel à GET qui soit vide.</p>
+
+<p class="highlight_part">drop http any any -> any any (metadata: tag DROPEmptyToken, color danger;msg:"HTTP response detected";flow:established,to_server; http.method;content:"GET"; http.uri; content:"authToken=&";sid:1000103;)</p>
+
+                <p>On relance Shovel sans oublier de supprimer le contenu du fichier output :P</p>
+
+                <p>Et on constate que la règle s'applique bien à toute règle marquée comme "flag out". On essaye donc sur les services de jeu et ça fonctionne, on récupère le flag qui est :</p>
+
+<p class="highlight_part">FCSC{1a5c5e3bc17bb6ff57387af1d0acbb9ba389fe52bdc9b4aafa5b77228a5b4b2f}</p>
+
+                <h1>Bonus : Piste de recherche sur le challenge 2</h1>
+
+                <p>Pour cette deuxième partie du challenge, on doit sécuriser un deuxième service contre deux failles principales. La première est une faille de logique qui permet à un utilisateur déjà connecté de changer son nom d'utilisateur en utilisant une deuxième fois le même login. Pour éviter ce cas de figure, j'ai essayé une règle qui s'applique à tous les flux TCP et qui leur interdit de contenir "2\n" s'ils contiennent déjà "Logged in successfully".</p>
+
+<p class="highlight_part">alert tcp any any -> any any (msg:"Login success marker"; content:"Logged in successfully"; flow:from_server,established; flowbits:set,login_success; flowbits:noalert; sid:1337001; rev:1;)
+
+<br><br>drop tcp any any -> any any (metadata: tag DROPLogintwice, color danger;msg:"DROP: Client tried to re-login after success"; content:"2|0A|"; flow:to_server,established; flowbits:isset,login_success; sid:1337003; rev:1;)</p>
+
+                <p>Mais cela ne fonctionne pas. J'ai donc essayé avec une autre règle qui a beaucoup mieux marché :</p>
+
+<p class="highlight_part">drop tcp any any -> any any (metadata: tag DROPLogintwiceOneFrame, color danger;msg:"DROP: Comunication contains two occurrences of 2\\n"; content:"2|0A|"; content:"2|0A|"; distance:0; within:1024; sid:1337004; rev:1;)</p>
+
+                <p>Mais le problème, c'est qu'un utilisateur peut mettre deux fois "2\n" à condition que ce ne soit pas dans le champ "login". Par conséquent, quand on teste la règle dans la structure de jeu, on nous indique que nos règles sont trop restrictives, et je pense ne pas être loin de la solution. La situation qui me pose problème est la suivante :</p>
+
+                <div class="img_container_center">
+                    <img src="../img/5/Pasted image 20250427202210.png">
+                </div>
+
+                <p>Mais je n'ai pas réussi à créer une règle qui soit efficace. J'ai cherché à créer une règle qui s'active si l'utilisateur répond deux fois à la question "Select an option: ", "2\n", mais cela n'a rien donné</p>
+
+            </div>
+        </div> 
+    </body>
+</html>

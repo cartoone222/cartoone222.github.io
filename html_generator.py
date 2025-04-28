@@ -79,4 +79,4 @@ class gen_html:
         if text[:7] == "python\n":
             self.content += ['\n<pre><code class="python">' + text[7:-1] + '</code></pre>\n']
         else:
-            self.content += ['\n<pre><p class="highlight_part">' + text[7:-1] + '</p></pre>\n']
+            self.content += ['\n<p class="highlight_part">' + text[1:-1] + '</p>\n']
