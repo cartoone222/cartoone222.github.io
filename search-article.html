@@ -65,6 +65,12 @@
                     <br>
                     <div class="bouton" id="article_liste">
                         <div class="article">
+                            <p id="article5">FCSC 2025 WU Surinosaur (Dewaste)</p>
+                        </div>
+                        <div class="article">
+                            <p id="article4">FCSC 2025 Display Port</p>
+                        </div>
+                        <div class="article">
                             <p id="article1">CTF PROLOGIN 2024-2025 Partie 1</p>
                         </div>
                         <div class="article">
@@ -72,9 +78,6 @@
                         </div>
                         <div class="article">
                             <p id="article3">FCSC 2024 Virtual SPInash</p>
-                        </div>
-                        <div class="article">
-                            <p id="article4">FCSC 2025 Display Port</p>
                         </div>
 
                         
@@ -118,6 +121,9 @@
                                     });
                                 });
                             }
+
+                            const article5 = document.getElementById("article5");
+                            article5.addEventListener("click", (event) => {open("/article/5.html","_self")})
 
                             const article1 = document.getElementById("article1");
                             article1.addEventListener("click", (event) => {open("/article/1.html","_self")})
