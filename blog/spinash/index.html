@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="fr-fr" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<link rel="icon" type="image/png" href="/avatar.png">
+<title>FCSC 2024 Virtual SPInash</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+  integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap');
+
+  .font-jersey {
+
+    font-family: "Ubuntu Sans Mono", monospace;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+
+
+  .md-content .katex-display {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .md-content .katex-display>.katex {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: 300ms ease-in-out;
+  }
+
+  .is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: opacity 300ms ease-in-out;
+  }
+
+  html.is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  html.is-animating {
+    cursor: progress;
+  }
+
+  html.is-leaving .swup-transition-fade {
+    opacity: 0;
+  }
+</style>
+
+<script src="https://unpkg.com/swup@4"></script>
+<script src="https://unpkg.com/@swup/preload-plugin@3"></script>
+<script src="https://unpkg.com/@swup/progress-plugin@3"></script>
+<script>
+  const swup = new Swup({
+    containers: ['#swup'],
+    animationSelector: '[class*="swup-transition-"]',
+    cache: true,
+    preload: true,
+    animateHistoryBrowsing: true,
+
+    plugins: [
+      new SwupPreloadPlugin(),
+      new SwupProgressPlugin()
+    ]
+  })
+  window.swup = swup
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  crossorigin="anonymous"></script>
+
+<script>
+  
+
+  
+  const KATEX_CONFIG = {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "$", right: "$", display: false},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false}
+    ],
+    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+    throwOnError: false
+  };
+
+  
+  function renderKatex() {
+    
+    if (typeof renderMathInElement !== "function") {
+      console.log("⏳ Waiting for KaTeX to load...");
+      return;
+    }
+
+    
+    const contentArea = document.getElementById('swup') || document.body;
+
+    try {
+      renderMathInElement(contentArea, KATEX_CONFIG);
+      console.log("✅ KaTeX rendered successfully");
+    } catch (error) {
+      console.error("❌ KaTeX rendering error:", error);
+    }
+  }
+
+  
+  function renderKatexWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof renderMathInElement === "function") {
+        renderKatex();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ KaTeX auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering KaTeX...");
+        
+        setTimeout(() => renderKatexWithRetry(3, 50), 50);
+      });
+      console.log("✅ KaTeX-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderKatexWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+  
+  window.renderKatex = renderKatex;
+</script>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  let initialized = false;
+
+  function renderMermaid() {
+    const contentArea = document.getElementById('swup') || document.body;
+    const mermaidBlocks = contentArea.querySelectorAll('.language-mermaid, .mermaid');
+
+    if (mermaidBlocks.length === 0) {
+      console.log("ℹ️ No mermaid blocks found on this page");
+      return;
+    }
+
+    if (!initialized) {
+      mermaid.initialize({startOnLoad: false, theme: 'dark'});
+      initialized = true;
+    }
+
+    mermaidBlocks.forEach(el => {
+      if (el.dataset.processed === 'true') {
+        const source = el.dataset.mermaidSource;
+        if (source) {
+          el.innerHTML = source;
+          el.removeAttribute('data-processed');
+        }
+      } else {
+        el.dataset.mermaidSource = el.textContent;
+      }
+    });
+
+    mermaid.run({nodes: mermaidBlocks})
+      .then(() => console.log("✅ Mermaid rendered successfully"))
+      .catch(err => console.error("❌ Mermaid rendering error:", err));
+  }
+
+  function renderMermaidWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof mermaid.initialize === "function") {
+        renderMermaid();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ Mermaid auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering mermaid...");
+        
+        setTimeout(() => renderMermaidWithRetry(3, 50), 50);
+      });
+      console.log("✅ Mermaid-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderMermaidWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+
+
+</script>
+
+
+</head>
+
+<body class="min-h-screen flex flex-col bg-black font-jersey text-white text-3xl">
+  <header>
+    <div class="sticky absolute top-0 z-50">
+  <nav class="w-full border-b border-gray-800 bg-[#070709]/95 backdrop-blur-sm text-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+        
+        <div class="flex items-center gap-3">
+
+          <a id="title" href='//localhost:1313/' class="flex items-center gap-3 group" aria-label="Homepage">
+
+            <img src='/img/profile.png' alt="cartoone&#39;s blog"
+              class="w-10 h-10 rounded-sm border-2 border-gray-700 object-cover transition-transform duration-300 transform group-hover:scale-105"
+              style="animation: border-breathe 4s ease-in-out infinite;" />
+            <span class="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-wide">
+              cartoone&#39;s blog
+              <span class="inline-block ml-2" style="animation: flicker 1.6s steps(2, end) infinite;">_</span>
+            </span>
+          </a>
+        </div>
+
+        
+        <div class="flex items-center gap-4">
+          
+          <div class="hidden md:flex items-center">
+            
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a aria-current="true" href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+          </div>
+
+          
+          <div class="md:hidden">
+            <button id="nav-toggle" aria-controls="mobile-menu" aria-expanded="false"
+              class="inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              aria-label="Open menu">
+              <svg class="h-6 w-6 text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      
+      <div id="mobile-menu" class="md:hidden hidden pb-4">
+        
+        
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a aria-current="true" href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+      </div>
+    </div>
+  </nav>
+
+  
+  <style>
+    @keyframes flicker {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      10% {
+        opacity: 0.2;
+        transform: translateY(-1px);
+      }
+
+      20% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes border-breathe {
+      0% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+
+      50% {
+        box-shadow: 0 0 18px 6px rgba(99, 102, 241, 0.03);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+    }
+
+    span{
+      color: green;
+    }
+
+    .undeline{
+      background: green;
+    }
+
+    header nav {
+      border-color: #47562f;
+      background: #1b2013;
+    }
+  </style>
+
+  
+  <script>
+    (function () {
+      const btn = document.getElementById('nav-toggle');
+      const menu = document.getElementById('mobile-menu');
+      if (!btn || !menu) return;
+      btn.addEventListener('click', () => {
+        const open = menu.classList.toggle('hidden') === false;
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
+</div>
+
+  </header>
+
+  <main class="flex-1 w-full">
+    <div id="swup" class="swup-transition-fade">
+      <div class="max-w-3xl lg:max-w-6xl xl:max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-10 lg:py-16">
+        
+<div class="grid grid-cols-12 gap-8">
+  
+  <aside class="hidden lg:block col-span-3">
+    <div class="sticky top-24">
+      <div class="mb-3 text-xs uppercase tracking-widest text-gray-500">Table of contents</div><nav class="toc border border-gray-800/70 bg-[#070709] rounded-sm p-4 text-base text-gray-300">
+        <nav id="TableOfContents"></nav>
+      </nav></div>
+  </aside>
+
+  
+  <article class="col-span-12 lg:col-span-9">
+    <header class="mb-6">
+  <h1 class="text-2xl sm:text-3xl md:text-4xl tracking-wide text-white">
+    FCSC 2024 Virtual SPInash
+  </h1>
+
+  <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm sm:text-base text-gray-400">
+    <span class="font-mono">Apr 16, 2026 • 12:42</span>
+    <span class="text-gray-700">/</span>
+    <span class="font-mono">2 min read</span>
+  </div><div class="mt-3 flex flex-wrap gap-2"><a href="/%20tags/fcsc"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #FCSC
+    </a><a href="/%20tags/wu-ctf"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #WU-ctf
+    </a><a href="/%20tags/fcsc2024"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #FCSC2024
+    </a></div></header>
+
+
+    
+    <div class="lg:hidden mb-6">
+      <details class="border border-gray-800/70 bg-[#070709] rounded-sm">
+        <summary class="cursor-pointer select-none px-4 py-3 text-gray-200 hover:text-white transition-colors">
+          Table of contents
+        </summary>
+        <div class="px-4 pb-4 toc text-base text-gray-300">
+          <nav id="TableOfContents"></nav>
+        </div>
+      </details>
+    </div>
+
+    <div class="border border-gray-800/70 bg-[#070709] rounded-sm p-5 sm:p-7">
+
+      <div class="md-content text-lg sm:text-xl leading-relaxed text-gray-200">
+        <p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/img/en_tete.png" loading="lazy" decoding="async"
+  alt=""></p>
+<p>Pour résoudre ce challenge, on dispose de 3 éléments :</p>
+<ul>
+<li>deux images, qui correspondent aux 2 faces d&rsquo;un circuit imprimé</li>
+<li>un accès à un port série virtuelle</li>
+</ul>
+<p>On commence par se connecter au port série. On obtient ce résultat :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">text</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>MicroPython v1.22.2 on 1980-01-01; Mysterious FCSC board with STM32F405RG
+</span></span><span style="display:flex;"><span>Type &#34;help()&#34; for more information.
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; </span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>On constate donc qu&rsquo;on est sur un microcontroleur STM32F405RG qui tourne sous Micropython.</p>
+<p>On a aussi les deux images du PCB :</p>
+<p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/img/virtual-spinash.jpg" loading="lazy" decoding="async"
+  alt="">
+<img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/img/virtual-spinash_back.jpg" loading="lazy" decoding="async"
+  alt=""></p>
+<p>On a deux puces montées en surface, quelque condensateurs, un quartz, un bouton, un port série, et 10 fiches mâles&hellip; rien de bien extravagant !!!</p>
+<p>On a identifié le micro-contrôleur. Pour la deuxième puce, on a une référence IS25LP080D.  Après recherche, c&rsquo;est une mémoire flash qui communique en série.</p>
+<p>Première étape, on récupère les Data Sheets pour avoir le pin out de la mémoire :</p>
+<p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/img/memoire.png" loading="lazy" decoding="async"
+  alt=""></p>
+<p>Voici un tableau qui explique les acronymes :</p>
+<div class="overflow-x-auto my-6 border border-neutral-800 rounded">
+  <table class="w-full border-collapse bg-neutral-950 text-gray-300 text-[0.95rem] min-w-full">
+    <thead class="bg-neutral-900 border-b-2 border-gray-200">
+        <tr>
+            <th class="px-4 py-3 font-semibold text-left text-gray-200 whitespace-nowrap">PIN</th>
+            <th class="px-4 py-3 font-semibold text-left text-gray-200 whitespace-nowrap">Fonction</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="border-b border-neutral-800 transition-colors hover:bg-neutral-900 last:border-b-0">
+            <td class="px-4 py-3 text-gray-400">Vcc</td>
+            <td class="px-4 py-3 text-gray-400">alimentation +</td>
+        </tr>
+        <tr class="border-b border-neutral-800 transition-colors hover:bg-neutral-900 last:border-b-0">
+            <td class="px-4 py-3 text-gray-400">GND</td>
+            <td class="px-4 py-3 text-gray-400">alimentation -</td>
+        </tr>
+        <tr class="border-b border-neutral-800 transition-colors hover:bg-neutral-900 last:border-b-0">
+            <td class="px-4 py-3 text-gray-400">WP#</td>
+            <td class="px-4 py-3 text-gray-400">protection en écriture</td>
+        </tr>
+        <tr class="border-b border-neutral-800 transition-colors hover:bg-neutral-900 last:border-b-0">
+            <td class="px-4 py-3 text-gray-400">SCK</td>
+            <td class="px-4 py-3 text-gray-400">signal d&rsquo;horloge</td>
+        </tr>
+        <tr class="border-b border-neutral-800 transition-colors hover:bg-neutral-900 last:border-b-0">
+            <td class="px-4 py-3 text-gray-400">CE#</td>
+            <td class="px-4 py-3 text-gray-400">chip enable</td>
+        </tr>
+        <tr class="border-b border-neutral-800 transition-colors hover:bg-neutral-900 last:border-b-0">
+            <td class="px-4 py-3 text-gray-400">HOLD#</td>
+            <td class="px-4 py-3 text-gray-400">non cabler</td>
+        </tr>
+        <tr class="border-b border-neutral-800 transition-colors hover:bg-neutral-900 last:border-b-0">
+            <td class="px-4 py-3 text-gray-400">SO</td>
+            <td class="px-4 py-3 text-gray-400">signal output</td>
+        </tr>
+        <tr class="border-b border-neutral-800 transition-colors hover:bg-neutral-900 last:border-b-0">
+            <td class="px-4 py-3 text-gray-400">SI</td>
+            <td class="px-4 py-3 text-gray-400">signal input</td>
+        </tr>
+    </tbody>
+  </table>
+</div>
+<p>On peut identifier le sens des composants avec la flèche blanche qui pointe la broche 1.</p>
+<p>On va maintenant chercher à identifier quelles broches du micro contrôleur sont connectées à quelles broches de la mémoire flash.</p>
+<p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/img/meme_FCSC_1.png" loading="lazy" decoding="async"
+  alt=""></p>
+<p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/img/virtual-spinash-analyse.jpg" loading="lazy" decoding="async"
+  alt=""></p>
+<p>Dans la mesure où les pins du micro-contrôleur sont numérotées dans le sens inverse des aiguilles d&rsquo;une montre, on a les correspondances suivantes :</p>
+<div class="overflow-x-auto my-6 border border-neutral-800 rounded">
+  <table class="w-full border-collapse bg-neutral-950 text-gray-300 text-[0.95rem] min-w-full">
+    <thead class="bg-neutral-900 border-b-2 border-gray-200">
+        <tr>
+            <th class="px-4 py-3 font-semibold text-left text-gray-200 whitespace-nowrap">PIN mémoire</th>
+            <th class="px-4 py-3 font-semibold text-left text-gray-200 whitespace-nowrap">PIN microcontrôleur</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="border-b border-neutral-800 transition-colors hover:bg-neutral-900 last:border-b-0">
+            <td class="px-4 py-3 text-gray-400">SCK</td>
+            <td class="px-4 py-3 text-gray-400">34</td>
+        </tr>
+        <tr class="border-b border-neutral-800 transition-colors hover:bg-neutral-900 last:border-b-0">
+            <td class="px-4 py-3 text-gray-400">SI/SO</td>
+            <td class="px-4 py-3 text-gray-400">35/36</td>
+        </tr>
+        <tr class="border-b border-neutral-800 transition-colors hover:bg-neutral-900 last:border-b-0">
+            <td class="px-4 py-3 text-gray-400">CE</td>
+            <td class="px-4 py-3 text-gray-400">33</td>
+        </tr>
+    </tbody>
+  </table>
+</div>
+<p>On va maintenant regarder le PIN out du micro-contrôleur.</p>
+<p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/img/FCSC_Spin_Micro.png" loading="lazy" decoding="async"
+  alt=""></p>
+<p>On constate que la mémoire est branchée sur l&rsquo;interface SPI-2. (Serial Peripheral Interface)</p>
+<p>On passe maintenant à l&rsquo;exploitation.
+On va écrire un code Python pour lire la mémoire :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">python</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> machine <span style="color:#f92672">import</span> Pin, SPI
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>spi2 <span style="color:#f92672">=</span> SPI(<span style="color:#ae81ff">2</span>, baudrate<span style="color:#f92672">=</span><span style="color:#ae81ff">10000000</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cs <span style="color:#f92672">=</span> Pin(<span style="color:#e6db74">&#34;PB12&#34;</span>, Pin<span style="color:#f92672">.</span>OUT)
+</span></span><span style="display:flex;"><span>cs<span style="color:#f92672">.</span>value(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>spi2<span style="color:#f92672">.</span>write(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\x03</span><span style="color:#e6db74">&#39;</span>) <span style="color:#75715e"># commande de lecture</span>
+</span></span><span style="display:flex;"><span>spi2<span style="color:#f92672">.</span>write(bytearray([(<span style="color:#ae81ff">0</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">16</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span>, (<span style="color:#ae81ff">0</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">8</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span>, <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span>]))
+</span></span><span style="display:flex;"><span>data <span style="color:#f92672">=</span> bytearray(<span style="color:#ae81ff">1024</span>)
+</span></span><span style="display:flex;"><span>spi2<span style="color:#f92672">.</span>readinto(data)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(data)</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>et on obtient le flag qui est donc :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">text</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>FCSC{a8937c95944625276140d65539299e81e179ec2293417010817a7a595fca987f}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style>
+      </div>
+    </div>
+  </article>
+</div>
+
+<style>
+  .toc {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  .toc li {
+    position: relative;
+    margin: 0.35rem 0;
+    padding-left: 1.25rem;
+     
+    overflow-wrap: anywhere;
+     
+    word-break: break-word;
+  }
+
+  .toc a {
+    display: block;
+     
+    padding: 0.15rem 0;
+    color: rgba(209, 213, 219, 0.92);
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-decoration-color: green;
+    text-underline-offset: 3px;
+  }
+
+   
+  .toc ul ul {
+    margin: 0.4rem 0 0.4rem 0.35rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid rgba(55, 65, 81, 0.6);
+  }
+
+  .toc ul ul>li {
+    padding-left: 1.75rem;
+  }
+
+   
+  .toc ul ul>li::before {
+    content: "├";
+    position: absolute;
+    left: 0.35rem;
+    top: 0.2rem;
+     
+    color: rgba(99, 102, 241, 0.75);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .toc ul ul>li:last-child::before {
+    content: "└";
+  }
+
+   
+  @media (min-width: 1024px) {
+    .toc {
+      max-height: calc(100vh - 9rem);
+      overflow: auto;
+      padding-right: 0.25rem;
+    }
+  }
+
+
+   
+  .md-content ul,
+  .md-content ol {
+    margin: 1rem 0;
+    padding-left: 1.35rem;
+  }
+
+  .md-content ul {
+    list-style: disc;
+  }
+
+  .md-content ul ul {
+    list-style: circle;
+  }
+
+  .md-content ul ul ul {
+    list-style: square;
+  }
+
+  .md-content ol {
+    list-style: decimal;
+  }
+
+  .md-content ol ol {
+    list-style: lower-roman;
+  }
+
+  .md-content ol ol ol {
+    list-style: lower-alpha;
+  }
+
+  .md-content li {
+    margin: 0.35rem 0;
+  }
+
+   
+  .md-content pre,
+  .md-content code {
+    tab-size: 4;
+  }
+</style>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="border-t border-gray-800 bg-[#070709] text-gray-400">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-col md:flex-row items-center justify-between py-6 space-y-4 md:space-y-0">
+
+      
+      <div class="text-sm sm:text-base md:text-lg">
+        <span class="relative inline-block">
+          © 2026 cartoone&#39;s blog. All rights reserved. <br>
+          Made with <a href="https://gohugo.io" target="_blank">Hugo</a> | <a
+            href="https://github.com/Enerhim/enervoid-theme" target="_blank">Enervoid</a>
+        </span>
+      </div>
+
+      
+      <div class="flex items-center space-x-6 text-sm sm:text-base md:text-lg">
+
+        
+        <a href='https://github.com/cartoone222' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-github-original"></i>
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://eldritch.cafe/@cartoone' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="fa-brands fa-mastodon"></i>
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://www.root-me.org/cartoone-222' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="fa-solid fa-user-secret"></i>
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a rel="me" href="https://eldritch.cafe/@cartoone" style="display:none;">Mastodon</a>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .border-t {
+    border-color: #47562f;
+    background: #1b2013;
+  }
+
+  .undeline{
+    background: green;
+  }
+</style>
+
+  </footer>
+</body>
+
+</html>

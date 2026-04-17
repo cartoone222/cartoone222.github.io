@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="fr-fr" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<link rel="icon" type="image/png" href="/avatar.png">
+<title>FCSC 2026 Si proche et pourtant si loin</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+  integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap');
+
+  .font-jersey {
+
+    font-family: "Ubuntu Sans Mono", monospace;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+
+
+  .md-content .katex-display {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .md-content .katex-display>.katex {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: 300ms ease-in-out;
+  }
+
+  .is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: opacity 300ms ease-in-out;
+  }
+
+  html.is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  html.is-animating {
+    cursor: progress;
+  }
+
+  html.is-leaving .swup-transition-fade {
+    opacity: 0;
+  }
+</style>
+
+<script src="https://unpkg.com/swup@4"></script>
+<script src="https://unpkg.com/@swup/preload-plugin@3"></script>
+<script src="https://unpkg.com/@swup/progress-plugin@3"></script>
+<script>
+  const swup = new Swup({
+    containers: ['#swup'],
+    animationSelector: '[class*="swup-transition-"]',
+    cache: true,
+    preload: true,
+    animateHistoryBrowsing: true,
+
+    plugins: [
+      new SwupPreloadPlugin(),
+      new SwupProgressPlugin()
+    ]
+  })
+  window.swup = swup
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  crossorigin="anonymous"></script>
+
+<script>
+  
+
+  
+  const KATEX_CONFIG = {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "$", right: "$", display: false},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false}
+    ],
+    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+    throwOnError: false
+  };
+
+  
+  function renderKatex() {
+    
+    if (typeof renderMathInElement !== "function") {
+      console.log("⏳ Waiting for KaTeX to load...");
+      return;
+    }
+
+    
+    const contentArea = document.getElementById('swup') || document.body;
+
+    try {
+      renderMathInElement(contentArea, KATEX_CONFIG);
+      console.log("✅ KaTeX rendered successfully");
+    } catch (error) {
+      console.error("❌ KaTeX rendering error:", error);
+    }
+  }
+
+  
+  function renderKatexWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof renderMathInElement === "function") {
+        renderKatex();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ KaTeX auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering KaTeX...");
+        
+        setTimeout(() => renderKatexWithRetry(3, 50), 50);
+      });
+      console.log("✅ KaTeX-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderKatexWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+  
+  window.renderKatex = renderKatex;
+</script>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  let initialized = false;
+
+  function renderMermaid() {
+    const contentArea = document.getElementById('swup') || document.body;
+    const mermaidBlocks = contentArea.querySelectorAll('.language-mermaid, .mermaid');
+
+    if (mermaidBlocks.length === 0) {
+      console.log("ℹ️ No mermaid blocks found on this page");
+      return;
+    }
+
+    if (!initialized) {
+      mermaid.initialize({startOnLoad: false, theme: 'dark'});
+      initialized = true;
+    }
+
+    mermaidBlocks.forEach(el => {
+      if (el.dataset.processed === 'true') {
+        const source = el.dataset.mermaidSource;
+        if (source) {
+          el.innerHTML = source;
+          el.removeAttribute('data-processed');
+        }
+      } else {
+        el.dataset.mermaidSource = el.textContent;
+      }
+    });
+
+    mermaid.run({nodes: mermaidBlocks})
+      .then(() => console.log("✅ Mermaid rendered successfully"))
+      .catch(err => console.error("❌ Mermaid rendering error:", err));
+  }
+
+  function renderMermaidWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof mermaid.initialize === "function") {
+        renderMermaid();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ Mermaid auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering mermaid...");
+        
+        setTimeout(() => renderMermaidWithRetry(3, 50), 50);
+      });
+      console.log("✅ Mermaid-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderMermaidWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+
+
+</script>
+
+
+</head>
+
+<body class="min-h-screen flex flex-col bg-black font-jersey text-white text-3xl">
+  <header>
+    <div class="sticky absolute top-0 z-50">
+  <nav class="w-full border-b border-gray-800 bg-[#070709]/95 backdrop-blur-sm text-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+        
+        <div class="flex items-center gap-3">
+
+          <a id="title" href='//localhost:1313/' class="flex items-center gap-3 group" aria-label="Homepage">
+
+            <img src='/img/profile.png' alt="cartoone&#39;s blog"
+              class="w-10 h-10 rounded-sm border-2 border-gray-700 object-cover transition-transform duration-300 transform group-hover:scale-105"
+              style="animation: border-breathe 4s ease-in-out infinite;" />
+            <span class="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-wide">
+              cartoone&#39;s blog
+              <span class="inline-block ml-2" style="animation: flicker 1.6s steps(2, end) infinite;">_</span>
+            </span>
+          </a>
+        </div>
+
+        
+        <div class="flex items-center gap-4">
+          
+          <div class="hidden md:flex items-center">
+            
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a aria-current="true" href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+          </div>
+
+          
+          <div class="md:hidden">
+            <button id="nav-toggle" aria-controls="mobile-menu" aria-expanded="false"
+              class="inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              aria-label="Open menu">
+              <svg class="h-6 w-6 text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      
+      <div id="mobile-menu" class="md:hidden hidden pb-4">
+        
+        
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a aria-current="true" href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+      </div>
+    </div>
+  </nav>
+
+  
+  <style>
+    @keyframes flicker {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      10% {
+        opacity: 0.2;
+        transform: translateY(-1px);
+      }
+
+      20% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes border-breathe {
+      0% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+
+      50% {
+        box-shadow: 0 0 18px 6px rgba(99, 102, 241, 0.03);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+    }
+
+    span{
+      color: green;
+    }
+
+    .undeline{
+      background: green;
+    }
+
+    header nav {
+      border-color: #47562f;
+      background: #1b2013;
+    }
+  </style>
+
+  
+  <script>
+    (function () {
+      const btn = document.getElementById('nav-toggle');
+      const menu = document.getElementById('mobile-menu');
+      if (!btn || !menu) return;
+      btn.addEventListener('click', () => {
+        const open = menu.classList.toggle('hidden') === false;
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
+</div>
+
+  </header>
+
+  <main class="flex-1 w-full">
+    <div id="swup" class="swup-transition-fade">
+      <div class="max-w-3xl lg:max-w-6xl xl:max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-10 lg:py-16">
+        
+<div class="grid grid-cols-12 gap-8">
+  
+  <aside class="hidden lg:block col-span-3">
+    <div class="sticky top-24">
+      <div class="mb-3 text-xs uppercase tracking-widest text-gray-500">Table of contents</div><nav class="toc border border-gray-800/70 bg-[#070709] rounded-sm p-4 text-base text-gray-300">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1---reconnaissance">1 - Reconnaissance</a>
+      <ul>
+        <li><a href="#logs-adb">Logs ADB</a></li>
+        <li><a href="#pcap">PCAP</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+    </li>
+    <li><a href="#2---reverse-du-firmware">2 - Reverse du firmware</a></li>
+    <li><a href="#3---décodage-de-la-communication">3 - Décodage de la communication</a></li>
+  </ul>
+</nav>
+      </nav></div>
+  </aside>
+
+  
+  <article class="col-span-12 lg:col-span-9">
+    <header class="mb-6">
+  <h1 class="text-2xl sm:text-3xl md:text-4xl tracking-wide text-white">
+    FCSC 2026 Si proche et pourtant si loin
+  </h1>
+
+  <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm sm:text-base text-gray-400">
+    <span class="font-mono">Apr 16, 2026 • 15:42</span>
+    <span class="text-gray-700">/</span>
+    <span class="font-mono">6 min read</span>
+  </div><div class="mt-3 flex flex-wrap gap-2"><a href="/%20tags/fcsc"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #FCSC
+    </a><a href="/%20tags/wu-ctf"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #WU-ctf
+    </a><a href="/%20tags/fcsc2026"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #FCSC2026
+    </a><a href="/%20tags/hardwear"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #hardwear
+    </a></div></header>
+
+
+    
+    <div class="lg:hidden mb-6">
+      <details class="border border-gray-800/70 bg-[#070709] rounded-sm">
+        <summary class="cursor-pointer select-none px-4 py-3 text-gray-200 hover:text-white transition-colors">
+          Table of contents
+        </summary>
+        <div class="px-4 pb-4 toc text-base text-gray-300">
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1---reconnaissance">1 - Reconnaissance</a>
+      <ul>
+        <li><a href="#logs-adb">Logs ADB</a></li>
+        <li><a href="#pcap">PCAP</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+    </li>
+    <li><a href="#2---reverse-du-firmware">2 - Reverse du firmware</a></li>
+    <li><a href="#3---décodage-de-la-communication">3 - Décodage de la communication</a></li>
+  </ul>
+</nav>
+        </div>
+      </details>
+    </div>
+
+    <div class="border border-gray-800/70 bg-[#070709] rounded-sm p-5 sm:p-7">
+
+      <div class="md-content text-lg sm:text-xl leading-relaxed text-gray-200">
+        <h2 id="1---reconnaissance" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      1 - Reconnaissance
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p><strong>3 fichiers nous sont donnés pour ce challenge :</strong></p>
+<ul>
+<li>un PCAP avec des trames d’annonce BLE</li>
+<li>un fichier de logs ADB</li>
+<li>et l’image suivante</li>
+</ul>
+<p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/img/Pasted_image_20260410193243.png" loading="lazy" decoding="async"
+  alt=""></p>
+<h3 id="logs-adb" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Logs ADB
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>Dans l’énoncé, on nous indique que le téléphone a vibré en touchant le device. On cherche donc dans les logs des références au NFC. On trouve cette ligne :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">text</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>03-21 12:56:17.149  4583  4583 D NfcDispatcher: dispatch tag: TAG: Tech [android.nfc.tech.IsoDep, android.nfc.tech.NfcA, android.nfc.tech.Ndef] message: NdefMessage [NdefRecord tnf=1 type=54 payload=02696449443A2046323A46383A37363A32313A43463A36453A42413A3232, NdefRecord tnf=1 type=54 payload=02616446573A206861636B726F706F6C652E66722F3238363763663235623036632E686578, NdefRecord tnf=1 type=54 payload=02737746573A20527575766920465720363934373636612B66637363, NdefRecord tnf=1 type=54 payload=026474081D1B3A0BE703A171E7745F35B44312EEFBD61E96AC0CA3]</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>On la décompose et on décode les 4 secteurs, et on trouve alors :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">text</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>secteur 0 | idID: F2:F8:76:21:CF:6E:BA:22
+</span></span><span style="display:flex;"><span>secteur 1 | adFW: hackropole.fr/2867cf25b06c.hex
+</span></span><span style="display:flex;"><span>secteur 2 | swFW: Ruuvi FW 694766a+fcsc
+</span></span><span style="display:flex;"><span>secteur 3 | 6474 081D1B3A0BE703A171E7745F35B44312EEFBD61E96AC0CA3</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>On va regarder le site hackropole.fr/2867cf25b06c.hex et on récupère un fichier <code>.hex</code>.</p>
+<h3 id="pcap" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      PCAP
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>Dans le PCAP, on a des paquets de présentation qui permettent au device de s’indiquer comme disponible, mais pas de paquets de données classiques. Cependant, on a un identifiant d’entreprise de création. On est donc face à un RuuviTag  (<a href="https://ruuvi.com/ruuvitag/)">https://ruuvi.com/ruuvitag/)</a>, ce qui est confirmé par l’image. Grâce à cela, on peut trouver la documentation publique (vive l’open source  <a href="https://docs.ruuvi.com/)">https://docs.ruuvi.com/)</a>.</p>
+<p>Avec toutes ces informations, on comprend que les <em>advertising packets</em> sont le véhicule classique des données pour ce type de device. On peut même identifier que l’on est sur une version chiffrée du protocole (encore de la crypto dans mon hardware (T-T) ).</p>
+<h3 id="conclusion" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Conclusion
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>On est face à un RuuviTag avec un firmware custom qui envoie des paquets chiffrés via les <em>advertising</em> du BLE.</p>
+<h2 id="2---reverse-du-firmware" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      2 - Reverse du firmware
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>On a récupéré un firmware en <code>.hex</code>. Au début, j’ai cru que c’était un format custom. Je l’ai analysé de manière approximative, mais je ne comprenais pas pourquoi c’était à ce point le bazar dedans lors du reverse. Puis j’ai appliqué les sains principes…</p>
+<p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/img/Pasted_image_20260410195238.png" loading="lazy" decoding="async"
+  alt=""></p>
+<p>Donc, c’est le format <code>Intel HEX</code> (<a href="https://en.wikipedia.org/wiki/Intel_HEX)">https://en.wikipedia.org/wiki/Intel_HEX)</a>. On l’extrait de manière normal, et on peut commencer le travail sérieux.</p>
+<p>On connaît le modèle de la carte grâce à celui du device : on est sur un <code>nRF52832</code>. On ouvre donc le firmware avec Ghidra, ainsi que le script SVD Loader, qui va nous permettre de mapper précisément la mémoire et de retrouver facilement toutes les périphériques qui sont accessibles via des zones d’adressage mémoire réservées, correspondant à des registres mappés en mémoire. On passe en argument au script le SVD du <code>nRF52832</code>.</p>
+<p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/img/Pasted_image_20260412083746.png" loading="lazy" decoding="async"
+  alt=""></p>
+<p>On avait vu dans les données NFC : <code>Ruuvi FW 694766a+fcsc</code>. On peut donc raisonnablement penser que le firmware est basé sur le firmware original. On va donc aller regarder les sources disponible sur github (<a href="https://github.com/ruuvi/ruuvi.firmware.c)">https://github.com/ruuvi/ruuvi.firmware.c)</a>.</p>
+<p>On trouve alors cette fonction :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">c</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">encode_to_8</span> (<span style="color:#66d9ef">uint8_t</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">const</span> output,
+</span></span><span style="display:flex;"><span>             <span style="color:#66d9ef">size_t</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">const</span> output_length,
+</span></span><span style="display:flex;"><span>             <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">rd_sensor_data_t</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">const</span> data)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">uint16_t</span> ep_8_measurement_count <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint8_t</span> final_key[RE_8_CIPHERTEXT_LENGTH] <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">rd_status_t</span> err_code <span style="color:#f92672">=</span> RD_SUCCESS;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">re_status_t</span> enc_code <span style="color:#f92672">=</span> RE_SUCCESS;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">re_8_data_t</span> ep_data <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0</span>};
+</span></span><span style="display:flex;"><span>    ep_8_measurement_count<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>    ep_8_measurement_count <span style="color:#f92672">%=</span> (RE_8_SEQCTR_MAX <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    ep_data.humidity_rh       <span style="color:#f92672">=</span> <span style="color:#a6e22e">rd_sensor_data_parse</span> (data, RD_SENSOR_HUMI_FIELD);
+</span></span><span style="display:flex;"><span>    ep_data.pressure_pa       <span style="color:#f92672">=</span> <span style="color:#a6e22e">rd_sensor_data_parse</span> (data, RD_SENSOR_PRES_FIELD);
+</span></span><span style="display:flex;"><span>    ep_data.temperature_c     <span style="color:#f92672">=</span> <span style="color:#a6e22e">rd_sensor_data_parse</span> (data, RD_SENSOR_TEMP_FIELD);
+</span></span><span style="display:flex;"><span>    ep_data.message_counter <span style="color:#f92672">=</span> ep_8_measurement_count;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint8_t</span> mvtctr <span style="color:#f92672">=</span> (<span style="color:#66d9ef">uint8_t</span>) (<span style="color:#a6e22e">app_sensor_event_count_get</span>() <span style="color:#f92672">%</span> (RE_8_MVTCTR_MAX <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>));
+</span></span><span style="display:flex;"><span>    ep_data.movement_count    <span style="color:#f92672">=</span> mvtctr;
+</span></span><span style="display:flex;"><span>    err_code <span style="color:#f92672">|=</span> <span style="color:#a6e22e">ep_8_key_generate</span> (final_key);
+</span></span><span style="display:flex;"><span>    err_code <span style="color:#f92672">|=</span> <span style="color:#a6e22e">ri_radio_address_get</span> (<span style="color:#f92672">&amp;</span>ep_data.address);
+</span></span><span style="display:flex;"><span>    err_code <span style="color:#f92672">|=</span> <span style="color:#a6e22e">ri_adv_tx_power_get</span> (<span style="color:#f92672">&amp;</span>ep_data.tx_power);
+</span></span><span style="display:flex;"><span>    err_code <span style="color:#f92672">|=</span> <span style="color:#a6e22e">rt_adc_vdd_get</span> (<span style="color:#f92672">&amp;</span>ep_data.battery_v);
+</span></span><span style="display:flex;"><span>    enc_code <span style="color:#f92672">|=</span> <span style="color:#a6e22e">re_8_encode</span> (output,
+</span></span><span style="display:flex;"><span>                             <span style="color:#f92672">&amp;</span>ep_data,
+</span></span><span style="display:flex;"><span>                             <span style="color:#f92672">&amp;</span>app_data_encrypt,
+</span></span><span style="display:flex;"><span>                             final_key,
+</span></span><span style="display:flex;"><span>                             RE_8_CIPHERTEXT_LENGTH);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (RE_SUCCESS <span style="color:#f92672">!=</span> enc_code)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        err_code <span style="color:#f92672">|=</span> RD_ERROR_INTERNAL;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">*</span>output_length <span style="color:#f92672">=</span> RE_5_DATA_LENGTH;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> err_code;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>On identifie une fonction de génération de clé, allons voir ça de plus près :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">c</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">ep_8_key_generate</span> (<span style="color:#66d9ef">uint8_t</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">const</span> key)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">rd_status_t</span> err_code <span style="color:#f92672">=</span> RD_SUCCESS;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">memcpy</span> (key, ep_8_key, RE_8_CIPHERTEXT_LENGTH);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint64_t</span> device_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    err_code <span style="color:#f92672">|=</span> <span style="color:#a6e22e">ri_comm_id_get</span> (<span style="color:#f92672">&amp;</span>device_id);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">uint8_t</span> ii <span style="color:#f92672">=</span> <span style="color:#ae81ff">0U</span>; ii <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">8</span>; ii<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        key[ii] <span style="color:#f92672">=</span> key[ii] <span style="color:#f92672">^</span> ( (device_id <span style="color:#f92672">&gt;&gt;</span> (ii <span style="color:#f92672">*</span> <span style="color:#ae81ff">8U</span>)) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFFU</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> err_code;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>La fonction <code>ri_comm_id_get</code> retourne l’identifiant unique du NFC. Cela nous donne un point d’entrée dans le firmware pour retrouver la fonction de génération de clé, si elle n’a pas été modifiée. On la trouve, puis on inspecte toutes les références à cette fonction. On en trouve une en particulier qui est intéressante.</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">c</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>uint <span style="color:#a6e22e">FUN_00033fd8</span>(undefined4 param_1,undefined4 <span style="color:#f92672">*</span>param_2,undefined4 param_3,<span style="color:#66d9ef">int</span> param_4)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  byte bVar1;
+</span></span><span style="display:flex;"><span>  byte bVar2;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">short</span> <span style="color:#f92672">*</span>psVar3;
+</span></span><span style="display:flex;"><span>  byte bVar4;
+</span></span><span style="display:flex;"><span>  uint uVar5;
+</span></span><span style="display:flex;"><span>  uint uVar6;
+</span></span><span style="display:flex;"><span>  uint uVar7;
+</span></span><span style="display:flex;"><span>  uint uVar8;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> iVar9;
+</span></span><span style="display:flex;"><span>  undefined4 local_50;
+</span></span><span style="display:flex;"><span>  undefined4 uStack_4c;
+</span></span><span style="display:flex;"><span>  undefined1 local_48 [<span style="color:#ae81ff">2</span>];
+</span></span><span style="display:flex;"><span>  byte bStack_46;
+</span></span><span style="display:flex;"><span>  byte bStack_45;
+</span></span><span style="display:flex;"><span>  undefined4 local_44;
+</span></span><span style="display:flex;"><span>  undefined4 local_40;
+</span></span><span style="display:flex;"><span>  undefined4 uStack_3c;
+</span></span><span style="display:flex;"><span>  undefined4 local_38;
+</span></span><span style="display:flex;"><span>  undefined4 local_34;
+</span></span><span style="display:flex;"><span>  undefined4 local_30;
+</span></span><span style="display:flex;"><span>  undefined1 auStack_2c [<span style="color:#ae81ff">4</span>];
+</span></span><span style="display:flex;"><span>  ushort local_28;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">short</span> local_26;
+</span></span><span style="display:flex;"><span>  undefined1 auStack_24 [<span style="color:#ae81ff">4</span>];
+</span></span><span style="display:flex;"><span>  undefined1 auStack_20 [<span style="color:#ae81ff">8</span>];
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  psVar3 <span style="color:#f92672">=</span> DAT_0003412c;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (param_4 <span style="color:#f92672">==</span> <span style="color:#ae81ff">4</span>) {
+</span></span><span style="display:flex;"><span>    local_44 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    _local_48 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    local_40 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    uStack_3c <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">FUN_00042a8c</span>(<span style="color:#f92672">&amp;</span>local_38,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0x20</span>);
+</span></span><span style="display:flex;"><span>    uVar6 <span style="color:#f92672">=</span> DAT_00034138;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">*</span>psVar3 <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>psVar3 <span style="color:#f92672">+</span> <span style="color:#ae81ff">1U</span> <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>              (<span style="color:#66d9ef">short</span>)(uint)((ulonglong)DAT_00034138 <span style="color:#f92672">*</span> (ulonglong)(ushort)(<span style="color:#f92672">*</span>psVar3 <span style="color:#f92672">+</span> <span style="color:#ae81ff">1U</span>) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">0x2f</span>);
+</span></span><span style="display:flex;"><span>    local_38 <span style="color:#f92672">=</span> <span style="color:#a6e22e">FUN_000327cc</span>(param_3,<span style="color:#ae81ff">0x80</span>);
+</span></span><span style="display:flex;"><span>    local_34 <span style="color:#f92672">=</span> <span style="color:#a6e22e">FUN_000327cc</span>(param_3,<span style="color:#ae81ff">0x10000</span>);
+</span></span><span style="display:flex;"><span>    local_30 <span style="color:#f92672">=</span> <span style="color:#a6e22e">FUN_000327cc</span>(param_3,<span style="color:#ae81ff">0x40000</span>);
+</span></span><span style="display:flex;"><span>    local_26 <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>psVar3;
+</span></span><span style="display:flex;"><span>    uVar5 <span style="color:#f92672">=</span> <span style="color:#a6e22e">FUN_00034cb0</span>();
+</span></span><span style="display:flex;"><span>    local_28 <span style="color:#f92672">=</span> (<span style="color:#66d9ef">short</span>)uVar5 <span style="color:#f92672">+</span> (<span style="color:#66d9ef">short</span>)(uint)((ulonglong)uVar6 <span style="color:#f92672">*</span> (ulonglong)uVar5 <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">0x2f</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xff</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">memcpy</span>(local_48,DAT_00034130,<span style="color:#ae81ff">0x10</span>);
+</span></span><span style="display:flex;"><span>    local_50 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    uStack_4c <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    uVar6 <span style="color:#f92672">=</span> <span style="color:#a6e22e">get_device_id</span>(<span style="color:#f92672">&amp;</span>local_50);
+</span></span><span style="display:flex;"><span>    bVar1 <span style="color:#f92672">=</span> bStack_46 <span style="color:#f92672">^</span> (byte)((uint)local_50 <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">0x10</span>);
+</span></span><span style="display:flex;"><span>    bVar2 <span style="color:#f92672">=</span> bStack_45 <span style="color:#f92672">^</span> (byte)((uint)local_50 <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">0x18</span>);
+</span></span><span style="display:flex;"><span>    bVar4 <span style="color:#f92672">=</span> local_48[<span style="color:#ae81ff">0</span>];
+</span></span><span style="display:flex;"><span>    _local_48 <span style="color:#f92672">=</span> (uint3)(byte)(local_48[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">^</span> (byte)((uint)local_50 <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">8</span>)) <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">8</span>;
+</span></span><span style="display:flex;"><span>    _local_48 <span style="color:#f92672">=</span> <span style="color:#a6e22e">CONCAT13</span>(bVar2,_local_48);
+</span></span><span style="display:flex;"><span>    _local_48 <span style="color:#f92672">=</span> <span style="color:#a6e22e">CONCAT31</span>(stack0xffffffb9,bVar4 <span style="color:#f92672">^</span> (byte)local_50);
+</span></span><span style="display:flex;"><span>    local_44._0_1_ <span style="color:#f92672">=</span> (byte)local_44 <span style="color:#f92672">^</span> (byte)uStack_4c;
+</span></span><span style="display:flex;"><span>    local_44._1_1_ <span style="color:#f92672">=</span> local_44._1_1_ <span style="color:#f92672">^</span> (byte)((uint)uStack_4c <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">8</span>);
+</span></span><span style="display:flex;"><span>    _local_48 <span style="color:#f92672">=</span> <span style="color:#a6e22e">CONCAT12</span>(bVar1,local_48);
+</span></span><span style="display:flex;"><span>    _local_48 <span style="color:#f92672">=</span> <span style="color:#a6e22e">CONCAT13</span>(bVar2,_local_48);
+</span></span><span style="display:flex;"><span>    local_44 <span style="color:#f92672">=</span> <span style="color:#a6e22e">CONCAT22</span>(<span style="color:#a6e22e">CONCAT11</span>(local_44._3_1_ <span style="color:#f92672">^</span> (byte)((uint)uStack_4c <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">0x18</span>),
+</span></span><span style="display:flex;"><span>                                 local_44._2_1_ <span style="color:#f92672">^</span> (byte)((uint)uStack_4c <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">0x10</span>)),
+</span></span><span style="display:flex;"><span>                        <span style="color:#a6e22e">CONCAT11</span>(local_44._1_1_,(byte)local_44));
+</span></span><span style="display:flex;"><span>    uVar5 <span style="color:#f92672">=</span> <span style="color:#a6e22e">FUN_0002d52c</span>(auStack_20);
+</span></span><span style="display:flex;"><span>    uVar7 <span style="color:#f92672">=</span> <span style="color:#a6e22e">FUN_0002c3cc</span>(auStack_24);
+</span></span><span style="display:flex;"><span>    uVar8 <span style="color:#f92672">=</span> <span style="color:#a6e22e">FUN_0003190c</span>(auStack_2c);
+</span></span><span style="display:flex;"><span>    uVar8 <span style="color:#f92672">=</span> uVar5 <span style="color:#f92672">|</span> uVar6 <span style="color:#f92672">|</span> uVar7 <span style="color:#f92672">|</span> uVar8;
+</span></span><span style="display:flex;"><span>    iVar9 <span style="color:#f92672">=</span> <span style="color:#a6e22e">FUN_00032c60</span>(param_1,<span style="color:#f92672">&amp;</span>local_38,DAT_00034134,local_48,<span style="color:#ae81ff">0x10</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (iVar9 <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>      uVar8 <span style="color:#f92672">=</span> uVar8 <span style="color:#f92672">|</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">*</span>param_2 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x18</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> uVar8;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0x200000</span>;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>On regarde un peu la tête des fonctions qu’elle appelle et on trouve un <code>memcpy</code>. On est sur une structure qui rappelle vaguement la fonction de génération de clé, mais avec un petit twist qui nous intéresse : la clé a l’air d’être hardcodée.</p>
+<p>On la dump :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">text</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>83 bc 4c 12 6d 8b b6 ba 39 3c b6 dc b4 78 93 90</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><h2 id="3---décodage-de-la-communication" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      3 - Décodage de la communication
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>On ressort la documentation, et en particulier cette page qui détaille le fonctionnement de l’algorithme de chiffrement, un simple AES-ECB (<a href="https://docs.ruuvi.com/communication/bluetooth-advertisements/data-format-8-encrypted-environmental)">https://docs.ruuvi.com/communication/bluetooth-advertisements/data-format-8-encrypted-environmental)</a>.</p>
+<p>On a donc tout pour dériver la clé, donc :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">python</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>id <span style="color:#f92672">=</span> bytes<span style="color:#f92672">.</span>fromhex(<span style="color:#e6db74">&#34;22 BA 6E CF 21 76 F8 F2&#34;</span>)
+</span></span><span style="display:flex;"><span>k  <span style="color:#f92672">=</span> bytes<span style="color:#f92672">.</span>fromhex(<span style="color:#e6db74">&#34;83 bc 4c 12 6d 8b b6 ba 39 3c b6 dc b4 78 93 90&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">deriv</span>(id, key):
+</span></span><span style="display:flex;"><span>    key2 <span style="color:#f92672">=</span> bytes([id[i] <span style="color:#f92672">^</span> key[i] <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>)])
+</span></span><span style="display:flex;"><span>    key2 <span style="color:#f92672">+=</span> key[<span style="color:#ae81ff">8</span>:]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> key2</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>On ajoute un petit coup de Scapy et on peut retrouver le flag en modifiant le fait de retirer quelques répétitions :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">python</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> scapy.all <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> Crypto.Cipher <span style="color:#f92672">import</span> AES
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>packets <span style="color:#f92672">=</span> rdpcap(<span style="color:#e6db74">&#34;btmon.pcap&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>key <span style="color:#f92672">=</span> deriv(id, k)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> packets:
+</span></span><span style="display:flex;"><span>    cipher <span style="color:#f92672">=</span> i[HCI_LE_Meta_Extended_Advertising_Reports][Raw]<span style="color:#f92672">.</span>load
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    cipher2 <span style="color:#f92672">=</span> cipher[<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">17</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    A <span style="color:#f92672">=</span> AES<span style="color:#f92672">.</span>new(key, AES<span style="color:#f92672">.</span>MODE_ECB)
+</span></span><span style="display:flex;"><span>    decrypted <span style="color:#f92672">=</span> A<span style="color:#f92672">.</span>decrypt(cipher2)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(decrypted[<span style="color:#f92672">-</span><span style="color:#ae81ff">4</span>:])</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/img/Pasted_image_20260412084816.png" loading="lazy" decoding="async"
+  alt=""></p>
+<p>Je tiens à remercier les challenge makers pour le temps et le soin qu’ils ont mis dans le développement de cette épreuve. Je l’ai trouvée extrêmement bien construite.</p>
+
+      </div>
+    </div>
+  </article>
+</div>
+
+<style>
+  .toc {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  .toc li {
+    position: relative;
+    margin: 0.35rem 0;
+    padding-left: 1.25rem;
+     
+    overflow-wrap: anywhere;
+     
+    word-break: break-word;
+  }
+
+  .toc a {
+    display: block;
+     
+    padding: 0.15rem 0;
+    color: rgba(209, 213, 219, 0.92);
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-decoration-color: green;
+    text-underline-offset: 3px;
+  }
+
+   
+  .toc ul ul {
+    margin: 0.4rem 0 0.4rem 0.35rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid rgba(55, 65, 81, 0.6);
+  }
+
+  .toc ul ul>li {
+    padding-left: 1.75rem;
+  }
+
+   
+  .toc ul ul>li::before {
+    content: "├";
+    position: absolute;
+    left: 0.35rem;
+    top: 0.2rem;
+     
+    color: rgba(99, 102, 241, 0.75);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .toc ul ul>li:last-child::before {
+    content: "└";
+  }
+
+   
+  @media (min-width: 1024px) {
+    .toc {
+      max-height: calc(100vh - 9rem);
+      overflow: auto;
+      padding-right: 0.25rem;
+    }
+  }
+
+
+   
+  .md-content ul,
+  .md-content ol {
+    margin: 1rem 0;
+    padding-left: 1.35rem;
+  }
+
+  .md-content ul {
+    list-style: disc;
+  }
+
+  .md-content ul ul {
+    list-style: circle;
+  }
+
+  .md-content ul ul ul {
+    list-style: square;
+  }
+
+  .md-content ol {
+    list-style: decimal;
+  }
+
+  .md-content ol ol {
+    list-style: lower-roman;
+  }
+
+  .md-content ol ol ol {
+    list-style: lower-alpha;
+  }
+
+  .md-content li {
+    margin: 0.35rem 0;
+  }
+
+   
+  .md-content pre,
+  .md-content code {
+    tab-size: 4;
+  }
+</style>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="border-t border-gray-800 bg-[#070709] text-gray-400">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-col md:flex-row items-center justify-between py-6 space-y-4 md:space-y-0">
+
+      
+      <div class="text-sm sm:text-base md:text-lg">
+        <span class="relative inline-block">
+          © 2026 cartoone&#39;s blog. All rights reserved. <br>
+          Made with <a href="https://gohugo.io" target="_blank">Hugo</a> | <a
+            href="https://github.com/Enerhim/enervoid-theme" target="_blank">Enervoid</a>
+        </span>
+      </div>
+
+      
+      <div class="flex items-center space-x-6 text-sm sm:text-base md:text-lg">
+
+        
+        <a href='https://github.com/cartoone222' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-github-original"></i>
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://eldritch.cafe/@cartoone' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="fa-brands fa-mastodon"></i>
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://www.root-me.org/cartoone-222' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="fa-solid fa-user-secret"></i>
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a rel="me" href="https://eldritch.cafe/@cartoone" style="display:none;">Mastodon</a>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .border-t {
+    border-color: #47562f;
+    background: #1b2013;
+  }
+
+  .undeline{
+    background: green;
+  }
+</style>
+
+  </footer>
+</body>
+
+</html>

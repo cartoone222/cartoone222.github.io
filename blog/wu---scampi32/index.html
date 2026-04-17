@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="fr-fr" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<link rel="icon" type="image/png" href="/avatar.png">
+<title></title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+  integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap');
+
+  .font-jersey {
+
+    font-family: "Ubuntu Sans Mono", monospace;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+
+
+  .md-content .katex-display {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .md-content .katex-display>.katex {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: 300ms ease-in-out;
+  }
+
+  .is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: opacity 300ms ease-in-out;
+  }
+
+  html.is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  html.is-animating {
+    cursor: progress;
+  }
+
+  html.is-leaving .swup-transition-fade {
+    opacity: 0;
+  }
+</style>
+
+<script src="https://unpkg.com/swup@4"></script>
+<script src="https://unpkg.com/@swup/preload-plugin@3"></script>
+<script src="https://unpkg.com/@swup/progress-plugin@3"></script>
+<script>
+  const swup = new Swup({
+    containers: ['#swup'],
+    animationSelector: '[class*="swup-transition-"]',
+    cache: true,
+    preload: true,
+    animateHistoryBrowsing: true,
+
+    plugins: [
+      new SwupPreloadPlugin(),
+      new SwupProgressPlugin()
+    ]
+  })
+  window.swup = swup
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  crossorigin="anonymous"></script>
+
+<script>
+  
+
+  
+  const KATEX_CONFIG = {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "$", right: "$", display: false},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false}
+    ],
+    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+    throwOnError: false
+  };
+
+  
+  function renderKatex() {
+    
+    if (typeof renderMathInElement !== "function") {
+      console.log("⏳ Waiting for KaTeX to load...");
+      return;
+    }
+
+    
+    const contentArea = document.getElementById('swup') || document.body;
+
+    try {
+      renderMathInElement(contentArea, KATEX_CONFIG);
+      console.log("✅ KaTeX rendered successfully");
+    } catch (error) {
+      console.error("❌ KaTeX rendering error:", error);
+    }
+  }
+
+  
+  function renderKatexWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof renderMathInElement === "function") {
+        renderKatex();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ KaTeX auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering KaTeX...");
+        
+        setTimeout(() => renderKatexWithRetry(3, 50), 50);
+      });
+      console.log("✅ KaTeX-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderKatexWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+  
+  window.renderKatex = renderKatex;
+</script>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  let initialized = false;
+
+  function renderMermaid() {
+    const contentArea = document.getElementById('swup') || document.body;
+    const mermaidBlocks = contentArea.querySelectorAll('.language-mermaid, .mermaid');
+
+    if (mermaidBlocks.length === 0) {
+      console.log("ℹ️ No mermaid blocks found on this page");
+      return;
+    }
+
+    if (!initialized) {
+      mermaid.initialize({startOnLoad: false, theme: 'dark'});
+      initialized = true;
+    }
+
+    mermaidBlocks.forEach(el => {
+      if (el.dataset.processed === 'true') {
+        const source = el.dataset.mermaidSource;
+        if (source) {
+          el.innerHTML = source;
+          el.removeAttribute('data-processed');
+        }
+      } else {
+        el.dataset.mermaidSource = el.textContent;
+      }
+    });
+
+    mermaid.run({nodes: mermaidBlocks})
+      .then(() => console.log("✅ Mermaid rendered successfully"))
+      .catch(err => console.error("❌ Mermaid rendering error:", err));
+  }
+
+  function renderMermaidWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof mermaid.initialize === "function") {
+        renderMermaid();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ Mermaid auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering mermaid...");
+        
+        setTimeout(() => renderMermaidWithRetry(3, 50), 50);
+      });
+      console.log("✅ Mermaid-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderMermaidWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+
+
+</script>
+
+
+</head>
+
+<body class="min-h-screen flex flex-col bg-black font-jersey text-white text-3xl">
+  <header>
+    <div class="sticky absolute top-0 z-50">
+  <nav class="w-full border-b border-gray-800 bg-[#070709]/95 backdrop-blur-sm text-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+        
+        <div class="flex items-center gap-3">
+
+          <a id="title" href='//localhost:1313/' class="flex items-center gap-3 group" aria-label="Homepage">
+
+            <img src='/img/profile.png' alt="cartoone&#39;s blog"
+              class="w-10 h-10 rounded-sm border-2 border-gray-700 object-cover transition-transform duration-300 transform group-hover:scale-105"
+              style="animation: border-breathe 4s ease-in-out infinite;" />
+            <span class="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-wide">
+              cartoone&#39;s blog
+              <span class="inline-block ml-2" style="animation: flicker 1.6s steps(2, end) infinite;">_</span>
+            </span>
+          </a>
+        </div>
+
+        
+        <div class="flex items-center gap-4">
+          
+          <div class="hidden md:flex items-center">
+            
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a aria-current="true" href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+          </div>
+
+          
+          <div class="md:hidden">
+            <button id="nav-toggle" aria-controls="mobile-menu" aria-expanded="false"
+              class="inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              aria-label="Open menu">
+              <svg class="h-6 w-6 text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      
+      <div id="mobile-menu" class="md:hidden hidden pb-4">
+        
+        
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a aria-current="true" href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+      </div>
+    </div>
+  </nav>
+
+  
+  <style>
+    @keyframes flicker {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      10% {
+        opacity: 0.2;
+        transform: translateY(-1px);
+      }
+
+      20% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes border-breathe {
+      0% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+
+      50% {
+        box-shadow: 0 0 18px 6px rgba(99, 102, 241, 0.03);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+    }
+
+    span{
+      color: green;
+    }
+
+    .undeline{
+      background: green;
+    }
+
+    header nav {
+      border-color: #47562f;
+      background: #1b2013;
+    }
+  </style>
+
+  
+  <script>
+    (function () {
+      const btn = document.getElementById('nav-toggle');
+      const menu = document.getElementById('mobile-menu');
+      if (!btn || !menu) return;
+      btn.addEventListener('click', () => {
+        const open = menu.classList.toggle('hidden') === false;
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
+</div>
+
+  </header>
+
+  <main class="flex-1 w-full">
+    <div id="swup" class="swup-transition-fade">
+      <div class="max-w-3xl lg:max-w-6xl xl:max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-10 lg:py-16">
+        
+<div class="grid grid-cols-12 gap-8">
+  
+  <aside class="hidden lg:block col-span-3">
+    <div class="sticky top-24">
+      <div class="mb-3 text-xs uppercase tracking-widest text-gray-500">Table of contents</div><nav class="toc border border-gray-800/70 bg-[#070709] rounded-sm p-4 text-base text-gray-300">
+        <nav id="TableOfContents"></nav>
+      </nav></div>
+  </aside>
+
+  
+  <article class="col-span-12 lg:col-span-9">
+    <header class="mb-6">
+  <h1 class="text-2xl sm:text-3xl md:text-4xl tracking-wide text-white">
+    
+  </h1>
+
+  <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm sm:text-base text-gray-400">
+    <span class="font-mono">Jan 01, 0001 • 00:00</span>
+    <span class="text-gray-700">/</span>
+    <span class="font-mono">6 min read</span>
+  </div></header>
+
+
+    
+    <div class="lg:hidden mb-6">
+      <details class="border border-gray-800/70 bg-[#070709] rounded-sm">
+        <summary class="cursor-pointer select-none px-4 py-3 text-gray-200 hover:text-white transition-colors">
+          Table of contents
+        </summary>
+        <div class="px-4 pb-4 toc text-base text-gray-300">
+          <nav id="TableOfContents"></nav>
+        </div>
+      </details>
+    </div>
+
+    <div class="border border-gray-800/70 bg-[#070709] rounded-sm p-5 sm:p-7">
+
+      <div class="md-content text-lg sm:text-xl leading-relaxed text-gray-200">
+        <h1 id="1---première-analyse" class=" mt-8 mb-3 text-2xl sm:text-3xl text-white">
+    <span class="relative inline-block">
+      1 - Première analyse
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h1>
+<p>Ce challenge est basé sur un processeur implémenté en Python, nommé nCPU, mais reste un challenge purement déterministe car aucune seed n’est introduite dans le modèle.</p>
+<p>La première étape est d’analyser le code fourni. On comprend que le flag va être découpé en 8 parties, qui seront ensuite dispatchées dans les registres de 0 à 7. Le code est désassemblé avant d’être donné au CPU, on va donc en profiter pour l’afficher. On obtient le code suivant :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ASM</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ASM" data-lang="ASM"><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R8</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R0</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R10</span>, <span style="color:#ae81ff">1042199187</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R11</span>, <span style="color:#ae81ff">324508639</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R8</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SHRIMP</span> <span style="color:#66d9ef">R12</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R9</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R10</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R12</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ADDU</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1024</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">189364614</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, -<span style="color:#ae81ff">382013801</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R8</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R10</span>, <span style="color:#ae81ff">1255156435</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R11</span>, <span style="color:#ae81ff">610839776</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R8</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SHRIMP</span> <span style="color:#66d9ef">R12</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R9</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R10</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R12</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ADDU</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1024</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">21</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, -<span style="color:#ae81ff">1570814974</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1190628912</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R8</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R2</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R10</span>, <span style="color:#ae81ff">1649624048</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R11</span>, <span style="color:#ae81ff">253635900</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R8</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SHRIMP</span> <span style="color:#66d9ef">R12</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R9</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R10</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R12</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ADDU</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1024</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">39</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">918377153</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1189870101</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R8</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R3</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R10</span>, -<span style="color:#ae81ff">1532158393</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R11</span>, -<span style="color:#ae81ff">1985229329</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R8</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SHRIMP</span> <span style="color:#66d9ef">R12</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R9</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R10</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R12</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ADDU</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1024</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">57</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, -<span style="color:#ae81ff">1817064021</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, -<span style="color:#ae81ff">56834482</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R8</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R4</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R10</span>, -<span style="color:#ae81ff">2087660728</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R11</span>, <span style="color:#ae81ff">270611011</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R8</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SHRIMP</span> <span style="color:#66d9ef">R12</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R9</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R10</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R12</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ADDU</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1024</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">75</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, -<span style="color:#ae81ff">1865150769</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1485325267</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R8</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R5</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R10</span>, <span style="color:#ae81ff">1438293097</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R11</span>, <span style="color:#ae81ff">1432778632</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R8</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SHRIMP</span> <span style="color:#66d9ef">R12</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R9</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R10</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R12</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ADDU</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1024</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">93</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, -<span style="color:#ae81ff">1703343653</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">479882693</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span><span style="color:#75715e"># 1 - Première analyse
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R8</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R6</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R10</span>, <span style="color:#ae81ff">550440309</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R11</span>, -<span style="color:#ae81ff">1515870811</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R8</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SHRIMP</span> <span style="color:#66d9ef">R12</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R9</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R10</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R12</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ADDU</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1024</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">111</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">78846657</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1618336931</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R8</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R7</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R10</span>, -<span style="color:#ae81ff">977009854</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R11</span>, <span style="color:#ae81ff">1515870810</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R11</span>, <span style="color:#66d9ef">R8</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SHRIMP</span> <span style="color:#66d9ef">R12</span>, <span style="color:#66d9ef">R11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R9</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MOVE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R10</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">XOR</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#66d9ef">R12</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ADDU</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">1024</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R8</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">129</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, -<span style="color:#ae81ff">370039574</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R9</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">596482869</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BNE</span> <span style="color:#66d9ef">R10</span>, <span style="color:#66d9ef">R13</span>, <span style="color:#ae81ff">146</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R0</span>, <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">HALT</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">LI</span> <span style="color:#66d9ef">R0</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">HALT</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>On remarque immédiatement un bloc qui se répète. Il prend la valeur de Rn, la place dans R9, charge des constantes dans R10 et R11, puis effectue 1024 tours de boucle avec des XOR et des MOV, ainsi qu’une instruction <code>SHRIMP</code>.</p>
+<h1 id="2---analyse-de-linstruction-shrimp" class=" mt-8 mb-3 text-2xl sm:text-3xl text-white">
+    <span class="relative inline-block">
+      2 - Analyse de l’instruction <code>SHRIMP</code>
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h1>
+<p>![[test.png]]</p>
+<p>J’ai beau chercher, je ne trouve pas cette instruction dans aucun standard d’assembleur. On va donc investiguer de ce côté. On va utiliser ce snippet pour tracer la réponse de cette instruction en fonction de l’entrée qu’on lui donne :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">python</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>xs <span style="color:#f92672">=</span> list(range(<span style="color:#ae81ff">1024</span>))
+</span></span><span style="display:flex;"><span>ys_real <span style="color:#f92672">=</span> [cpu<span style="color:#f92672">.</span>registry<span style="color:#f92672">.</span>neural<span style="color:#f92672">.</span>neural_shrimp(i) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> xs]</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>on trace la courbe et on obtien :
+![[1.png]]</p>
+<p>On observe une magnifique périodicité de 256, avec un offset. On trace donc la même courbe en avançant par pas de 256, et on obtient la courbe suivante :</p>
+<p>![[1 1.png]]</p>
+<p>Bon, on a une périodicité de 256 et une périodicité de 256². On vérifie à la puissance supérieure, et c’est toujours le cas, en tenant compte du fait que ce sont des entiers signés sur 32 bits.</p>
+<p>On peut donc en déduire que le traitement du <code>SHRIMP</code> se fait byte par byte. Après quelques tests, on comprend qu’il s’agit en réalité d’une S-box.</p>
+<h1 id="3---conséquence" class=" mt-8 mb-3 text-2xl sm:text-3xl text-white">
+    <span class="relative inline-block">
+      3 - Conséquence
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h1>
+<p>Du coup, si on revient à notre ASM :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">text</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>XOR R11, R10, R11
+</span></span><span style="display:flex;"><span>XOR R11, R11, R8
+</span></span><span style="display:flex;"><span>SHRIMP R12, R11
+</span></span><span style="display:flex;"><span>MOVE R13, R9
+</span></span><span style="display:flex;"><span>MOVE R9, R10</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>On remarque que, par conséquent, il n’y a aucune diffusion entre les bytes, ce qui va bien nous arranger, car cela nous permet de brute force caractère par caractère.</p>
+<h1 id="4--brute-force" class=" mt-8 mb-3 text-2xl sm:text-3xl text-white">
+    <span class="relative inline-block">
+      4 -Brute force
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h1>
+<p>On reprend donc le code du challenge pour coder cet outil de brute force, un peu trop “CTF style” : j’ai géré les 8 rounds un par un à la main.</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">python</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> re
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> ncpu.model <span style="color:#f92672">import</span> CPU
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> ncpu.model.scampi32_bytecode <span style="color:#f92672">import</span> disassemble_scampi32, assemble_scampi32
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>test <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LI R8, 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">MOVE R9, R6
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LI R10, 550440309
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LI R11, -1515870811
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">XOR R11, R10, R11
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">XOR R11, R11, R8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SHRIMP R12, R11
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">MOVE R13, R9
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">MOVE R9, R10
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">XOR R10, R13, R12
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LI R13, 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">ADDU R8, R8, R13
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LI R13, 1024
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">BNE R8, R13, 3
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LI R13, 78846657
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LI R14, 1618336931
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">HALT
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> <span style="color:#e6db74">&#34;ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&#34;</span>:
+</span></span><span style="display:flex;"><span>    flag <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;FCSC{N3URA-LSHR1-MPNET-32FCS-C2026}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#            00001111222233334444</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> re<span style="color:#f92672">.</span>fullmatch(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#34;FCSC\{[A-Z0-9]</span><span style="color:#e6db74">{5}</span><span style="color:#e6db74">(?:-[A-Z0-9]</span><span style="color:#e6db74">{5}</span><span style="color:#e6db74">)</span><span style="color:#e6db74">{4}</span><span style="color:#e6db74">\}&#34;</span>, flag):
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#34;Invalid flag.&#34;</span>)
+</span></span><span style="display:flex;"><span>        exit(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    flag <span style="color:#f92672">=</span> flag[<span style="color:#ae81ff">5</span>:<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>ljust(<span style="color:#ae81ff">32</span>, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x00</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    flag <span style="color:#f92672">=</span> [ flag[i:i <span style="color:#f92672">+</span> <span style="color:#ae81ff">4</span>] <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">4</span>) ]
+</span></span><span style="display:flex;"><span>    flag <span style="color:#f92672">=</span> [ int<span style="color:#f92672">.</span>from_bytes(x<span style="color:#f92672">.</span>encode(), <span style="color:#e6db74">&#34;little&#34;</span>) <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> flag ]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    cpu <span style="color:#f92672">=</span> CPU(neural_execution <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>, max_cycles <span style="color:#f92672">=</span> <span style="color:#ae81ff">250000</span>, models_dir <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;models&#34;</span>)
+</span></span><span style="display:flex;"><span>    cpu<span style="color:#f92672">.</span>load_program(test)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> idx, chunk <span style="color:#f92672">in</span> enumerate(flag):
+</span></span><span style="display:flex;"><span>        cpu<span style="color:#f92672">.</span>state <span style="color:#f92672">=</span> cpu<span style="color:#f92672">.</span>state<span style="color:#f92672">.</span>set_register(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;R</span><span style="color:#e6db74">{</span>idx<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>, chunk)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    cpu<span style="color:#f92672">.</span>run()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(hex(cpu<span style="color:#f92672">.</span>get_register(<span style="color:#e6db74">&#34;R10&#34;</span>)) , hex(cpu<span style="color:#f92672">.</span>get_register(<span style="color:#e6db74">&#34;R9&#34;</span>)), hex(cpu<span style="color:#f92672">.</span>get_register(<span style="color:#e6db74">&#34;R13&#34;</span>)), hex(cpu<span style="color:#f92672">.</span>get_register(<span style="color:#e6db74">&#34;R14&#34;</span>)))</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>Chaque brute force de bloc prend grosso modo 2 à 5 minutes. On récupère une table avec toutes les valeurs prises par chaque octet en fonction de l’entrée. On peut donc se référer à cette table pour retrouver à quel moment l’octet était correct.</p>
+<p>Il faut faire un peu attention au fait que certains octets sont inversés à cause du complément à 32 bits, mais malgré cette subtilité, on peut automatiser la technique. Une fois le script écrit, le flag tombe en 30 minutes malgré mon grille-pain.</p>
+
+      </div>
+    </div>
+  </article>
+</div>
+
+<style>
+  .toc {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  .toc li {
+    position: relative;
+    margin: 0.35rem 0;
+    padding-left: 1.25rem;
+     
+    overflow-wrap: anywhere;
+     
+    word-break: break-word;
+  }
+
+  .toc a {
+    display: block;
+     
+    padding: 0.15rem 0;
+    color: rgba(209, 213, 219, 0.92);
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-decoration-color: green;
+    text-underline-offset: 3px;
+  }
+
+   
+  .toc ul ul {
+    margin: 0.4rem 0 0.4rem 0.35rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid rgba(55, 65, 81, 0.6);
+  }
+
+  .toc ul ul>li {
+    padding-left: 1.75rem;
+  }
+
+   
+  .toc ul ul>li::before {
+    content: "├";
+    position: absolute;
+    left: 0.35rem;
+    top: 0.2rem;
+     
+    color: rgba(99, 102, 241, 0.75);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .toc ul ul>li:last-child::before {
+    content: "└";
+  }
+
+   
+  @media (min-width: 1024px) {
+    .toc {
+      max-height: calc(100vh - 9rem);
+      overflow: auto;
+      padding-right: 0.25rem;
+    }
+  }
+
+
+   
+  .md-content ul,
+  .md-content ol {
+    margin: 1rem 0;
+    padding-left: 1.35rem;
+  }
+
+  .md-content ul {
+    list-style: disc;
+  }
+
+  .md-content ul ul {
+    list-style: circle;
+  }
+
+  .md-content ul ul ul {
+    list-style: square;
+  }
+
+  .md-content ol {
+    list-style: decimal;
+  }
+
+  .md-content ol ol {
+    list-style: lower-roman;
+  }
+
+  .md-content ol ol ol {
+    list-style: lower-alpha;
+  }
+
+  .md-content li {
+    margin: 0.35rem 0;
+  }
+
+   
+  .md-content pre,
+  .md-content code {
+    tab-size: 4;
+  }
+</style>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="border-t border-gray-800 bg-[#070709] text-gray-400">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-col md:flex-row items-center justify-between py-6 space-y-4 md:space-y-0">
+
+      
+      <div class="text-sm sm:text-base md:text-lg">
+        <span class="relative inline-block">
+          © 2026 cartoone&#39;s blog. All rights reserved. <br>
+          Made with <a href="https://gohugo.io" target="_blank">Hugo</a> | <a
+            href="https://github.com/Enerhim/enervoid-theme" target="_blank">Enervoid</a>
+        </span>
+      </div>
+
+      
+      <div class="flex items-center space-x-6 text-sm sm:text-base md:text-lg">
+
+        
+        <a href='https://github.com/cartoone222' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-github-original"></i>
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://eldritch.cafe/@cartoone' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="fa-brands fa-mastodon"></i>
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://www.root-me.org/cartoone-222' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="fa-solid fa-user-secret"></i>
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a rel="me" href="https://eldritch.cafe/@cartoone" style="display:none;">Mastodon</a>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .border-t {
+    border-color: #47562f;
+    background: #1b2013;
+  }
+
+  .undeline{
+    background: green;
+  }
+</style>
+
+  </footer>
+</body>
+
+</html>
