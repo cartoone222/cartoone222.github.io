@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Challmaking on cartoone&#39;s blog</title>
-    <link>//localhost:1313/tags/challmaking/</link>
+    <link>/tags/challmaking/</link>
     <description>Recent content in Challmaking on cartoone&#39;s blog</description>
     <generator>Hugo</generator>
     <language>fr-fr</language>
     <lastBuildDate>Thu, 16 Apr 2026 14:42:00 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/tags/challmaking/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/challmaking/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>UwUspy</title>
-      <link>//localhost:1313/blog/uwuspy/</link>
+      <link>/blog/uwuspy/</link>
       <pubDate>Thu, 16 Apr 2026 14:42:00 +0000</pubDate>
-      <guid>//localhost:1313/blog/uwuspy/</guid>
+      <guid>/blog/uwuspy/</guid>
       <description>&lt;p&gt;Dans le cadre de mon entraînement pour participer avec la Team France à l&amp;rsquo;ECSC, j&amp;rsquo;ai eu l&amp;rsquo;occasion de participer au CTF CWTE pour lequel il nous a été demandé d&amp;rsquo;écrire un challenge. J&amp;rsquo;ai donc choisi d&amp;rsquo;écrire un challenge sur la radio. Le challenge a été publié sur Hackropole : (&lt;a href=&#34;https://hackropole.fr/fr/challenges/hardware/cte2025-hardware-uwuspy/)&#34;&gt;https://hackropole.fr/fr/challenges/hardware/cte2025-hardware-uwuspy/)&lt;/a&gt;. Dans cet article, je vais proposer un WU de ce challenge. Je remercie Elycar pour son aide.&lt;/p&gt;&#xA;&lt;p&gt;=== &lt;em&gt;&lt;strong&gt;WU (attention : spoiler)&lt;/strong&gt;&lt;/em&gt; ===&lt;/p&gt;</description>
     </item>
   </channel>

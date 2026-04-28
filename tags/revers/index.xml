@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Revers on cartoone&#39;s blog</title>
-    <link>//localhost:1313/tags/revers/</link>
+    <link>/tags/revers/</link>
     <description>Recent content in Revers on cartoone&#39;s blog</description>
     <generator>Hugo</generator>
     <language>fr-fr</language>
     <lastBuildDate>Thu, 16 Apr 2026 16:42:00 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/tags/revers/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/revers/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Si proche et pourtant si loin</title>
-      <link>//localhost:1313/blog/scampi32/</link>
+      <link>/blog/scampi32/</link>
       <pubDate>Thu, 16 Apr 2026 16:42:00 +0000</pubDate>
-      <guid>//localhost:1313/blog/scampi32/</guid>
+      <guid>/blog/scampi32/</guid>
       <description>&lt;h1 id=&#34;1---première-analyse&#34; class=&#34; mt-8 mb-3 text-2xl sm:text-3xl text-white&#34;&gt;&#xA;    &lt;span class=&#34;relative inline-block&#34;&gt;&#xA;      1 - Première analyse&#xA;      &lt;span&#xA;        class=&#34;absolute left-0 -bottom-1 h-px w-0 bg-indigo-400&#34;&gt;&lt;/span&gt;&#xA;    &lt;/span&gt;&#xA;&lt;/h1&gt;&#xA;&lt;p&gt;Ce challenge est basé sur un processeur implémenté en Python, nommé nCPU, mais reste un challenge purement déterministe car aucune seed n’est introduite dans le modèle.&lt;/p&gt;&#xA;&lt;p&gt;La première étape est d’analyser le code fourni. On comprend que le flag va être découpé en 8 parties, qui seront ensuite dispatchées dans les registres de 0 à 7. Le code est désassemblé avant d’être donné au CPU, on va donc en profiter pour l’afficher. On obtient le code suivant :&lt;/p&gt;</description>
     </item>
   </channel>

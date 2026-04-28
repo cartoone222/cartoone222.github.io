@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>FCSC2025 on cartoone&#39;s blog</title>
-    <link>//localhost:1313/tags/fcsc2025/</link>
+    <link>/tags/fcsc2025/</link>
     <description>Recent content in FCSC2025 on cartoone&#39;s blog</description>
     <generator>Hugo</generator>
     <language>fr-fr</language>
     <lastBuildDate>Thu, 16 Apr 2026 13:42:00 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/tags/fcsc2025/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/fcsc2025/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>FCSC 2025 DisplayPort</title>
-      <link>//localhost:1313/blog/displayport/</link>
+      <link>/blog/displayport/</link>
       <pubDate>Thu, 16 Apr 2026 13:42:00 +0000</pubDate>
-      <guid>//localhost:1313/blog/displayport/</guid>
-      <description>&lt;p&gt;&lt;img class=&#34;mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20&#34; src=&#34;//localhost:1313/img/Pasted_image_20250425155045.png&#34; loading=&#34;lazy&#34; decoding=&#34;async&#34;&#xA;  alt=&#34;&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;On commence par télécharger le fichier, de plus on en profite pour se procurer la documentation de la norme DisplayPort 1.2.&lt;/p&gt;&#xA;&lt;p&gt;Un premier tour sur la page Wikipédia du standard DisplayPort (&lt;a href=&#34;https://fr.wikipedia.org/wiki/DisplayPort&#34;&gt;https://fr.wikipedia.org/wiki/DisplayPort&lt;/a&gt;) nous apprend que la broche 3 appartient à la ligne différentielle 0 et qu&amp;rsquo;elle correspond au signal négatif de la paire. On va donc commencer par l&amp;rsquo;inverser en créant un fichier &amp;ldquo;NotDisplayPort.bin&amp;rdquo; avec la commande suivante :&lt;/p&gt;</description>
+      <guid>/blog/displayport/</guid>
+      <description>&lt;p&gt;&lt;img class=&#34;mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20&#34; src=&#34;/img/Pasted_image_20250425155045.png&#34; loading=&#34;lazy&#34; decoding=&#34;async&#34;&#xA;  alt=&#34;&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;On commence par télécharger le fichier, de plus on en profite pour se procurer la documentation de la norme DisplayPort 1.2.&lt;/p&gt;&#xA;&lt;p&gt;Un premier tour sur la page Wikipédia du standard DisplayPort (&lt;a href=&#34;https://fr.wikipedia.org/wiki/DisplayPort&#34;&gt;https://fr.wikipedia.org/wiki/DisplayPort&lt;/a&gt;) nous apprend que la broche 3 appartient à la ligne différentielle 0 et qu&amp;rsquo;elle correspond au signal négatif de la paire. On va donc commencer par l&amp;rsquo;inverser en créant un fichier &amp;ldquo;NotDisplayPort.bin&amp;rdquo; avec la commande suivante :&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

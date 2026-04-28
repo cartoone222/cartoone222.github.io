@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Mermaid on cartoone&#39;s blog</title>
-    <link>//localhost:1313/tags/mermaid/</link>
+    <link>/tags/mermaid/</link>
     <description>Recent content in Mermaid on cartoone&#39;s blog</description>
     <generator>Hugo</generator>
     <language>fr-fr</language>
     <lastBuildDate>Fri, 22 Mar 2024 14:45:30 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/tags/mermaid/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/mermaid/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Code, Mermaid &amp; Diagrams</title>
-      <link>//localhost:1313/blog/prologin_1/</link>
+      <link>/blog/prologin_1/</link>
       <pubDate>Fri, 22 Mar 2024 14:45:30 +0000</pubDate>
-      <guid>//localhost:1313/blog/prologin_1/</guid>
+      <guid>/blog/prologin_1/</guid>
       <description>&lt;h1 id=&#34;partie-1-stéganographie&#34; class=&#34; mt-8 mb-3 text-2xl sm:text-3xl text-white&#34;&gt;&#xA;    &lt;span class=&#34;relative inline-block&#34;&gt;&#xA;      Partie 1 stéganographie&#xA;      &lt;span&#xA;        class=&#34;absolute left-0 -bottom-1 h-px w-0 bg-indigo-400&#34;&gt;&lt;/span&gt;&#xA;    &lt;/span&gt;&#xA;&lt;/h1&gt;</description>
     </item>
   </channel>
