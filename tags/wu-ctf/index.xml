@@ -6,17 +6,24 @@
     <description>Recent content in WU-Ctf on cartoone&#39;s blog</description>
     <generator>Hugo</generator>
     <language>fr-fr</language>
-    <lastBuildDate>Thu, 16 Apr 2026 15:42:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 16 Apr 2026 16:42:00 +0000</lastBuildDate>
     <atom:link href="/tags/wu-ctf/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Si proche et pourtant si loin</title>
+      <title>FCSC 2026 scampi32</title>
+      <link>/blog/scampi32/</link>
+      <pubDate>Thu, 16 Apr 2026 16:42:00 +0000</pubDate>
+      <guid>/blog/scampi32/</guid>
+      <description>&lt;h2 id=&#34;1---première-analyse&#34; class=&#34;mt-8 mb-3 text-xl sm:text-2xl text-white&#34;&gt;&#xA;    &lt;span class=&#34;relative inline-block&#34;&gt;&#xA;      1 - Première analyse&#xA;      &lt;span&#xA;        class=&#34;absolute left-0 -bottom-1 h-px w-0 bg-indigo-400&#34;&gt;&lt;/span&gt;&#xA;    &lt;/span&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;Ce challenge est basé sur un processeur implémenté en Python, nommé nCPU, mais reste un challenge purement déterministe car aucune seed n’est introduite dans le modèle.&lt;/p&gt;&#xA;&lt;p&gt;La première étape est d’analyser le code fourni. On comprend que le flag va être découpé en 8 parties, qui seront ensuite dispatchées dans les registres de 0 à 7. Le code est désassemblé avant d’être donné au CPU, on va donc en profiter pour l’afficher. On obtient le code suivant :&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>FCSC 2026 Si proche et pourtant si loin</title>
       <link>/blog/si_proche/</link>
       <pubDate>Thu, 16 Apr 2026 15:42:00 +0000</pubDate>
       <guid>/blog/si_proche/</guid>
       <description>&lt;h2 id=&#34;1---reconnaissance&#34; class=&#34;mt-8 mb-3 text-xl sm:text-2xl text-white&#34;&gt;&#xA;    &lt;span class=&#34;relative inline-block&#34;&gt;&#xA;      1 - Reconnaissance&#xA;      &lt;span&#xA;        class=&#34;absolute left-0 -bottom-1 h-px w-0 bg-indigo-400&#34;&gt;&lt;/span&gt;&#xA;    &lt;/span&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;3 fichiers nous sont donnés pour ce challenge :&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;un PCAP avec des trames d’annonce BLE&lt;/li&gt;&#xA;&lt;li&gt;un fichier de logs ADB&lt;/li&gt;&#xA;&lt;li&gt;et l’image suivante&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;&lt;img class=&#34;mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20&#34; src=&#34;/img/Pasted_image_20260410193243.png&#34; loading=&#34;lazy&#34; decoding=&#34;async&#34;&#xA;  alt=&#34;&#34;&gt;&lt;/p&gt;&#xA;&lt;h3 id=&#34;logs-adb&#34; class=&#34;mt-6 mb-2 text-lg sm:text-xl text-white&#34;&gt;&#xA;    &lt;span class=&#34;relative inline-block&#34;&gt;&#xA;      Logs ADB&#xA;      &lt;span&#xA;        class=&#34;absolute left-0 -bottom-1 h-px w-0 bg-indigo-400&#34;&gt;&lt;/span&gt;&#xA;    &lt;/span&gt;&#xA;&lt;/h3&gt;&#xA;&lt;p&gt;Dans l’énoncé, on nous indique que le téléphone a vibré en touchant le device. On cherche donc dans les logs des références au NFC. On trouve cette ligne :&lt;/p&gt;</description>
     </item>
     <item>
-      <title>UwUspy</title>
+      <title>CWTE 2025 UwUspy</title>
       <link>/blog/uwuspy/</link>
       <pubDate>Thu, 16 Apr 2026 14:42:00 +0000</pubDate>
       <guid>/blog/uwuspy/</guid>

@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="fr-fr" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<link rel="icon" type="image/png" href="/avatar.png">
+<title>Calculatrice Rust OCaml</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+  integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap');
+
+  .font-jersey {
+
+    font-family: "Ubuntu Sans Mono", monospace;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+
+
+  .md-content .katex-display {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .md-content .katex-display>.katex {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: 300ms ease-in-out;
+  }
+
+  .is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: opacity 300ms ease-in-out;
+  }
+
+  html.is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  html.is-animating {
+    cursor: progress;
+  }
+
+  html.is-leaving .swup-transition-fade {
+    opacity: 0;
+  }
+</style>
+
+<script src="https://unpkg.com/swup@4"></script>
+<script src="https://unpkg.com/@swup/preload-plugin@3"></script>
+<script src="https://unpkg.com/@swup/progress-plugin@3"></script>
+<script>
+  const swup = new Swup({
+    containers: ['#swup'],
+    animationSelector: '[class*="swup-transition-"]',
+    cache: true,
+    preload: true,
+    animateHistoryBrowsing: true,
+
+    plugins: [
+      new SwupPreloadPlugin(),
+      new SwupProgressPlugin()
+    ]
+  })
+  window.swup = swup
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  crossorigin="anonymous"></script>
+
+<script>
+  
+
+  
+  const KATEX_CONFIG = {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "$", right: "$", display: false},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false}
+    ],
+    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+    throwOnError: false
+  };
+
+  
+  function renderKatex() {
+    
+    if (typeof renderMathInElement !== "function") {
+      console.log("⏳ Waiting for KaTeX to load...");
+      return;
+    }
+
+    
+    const contentArea = document.getElementById('swup') || document.body;
+
+    try {
+      renderMathInElement(contentArea, KATEX_CONFIG);
+      console.log("✅ KaTeX rendered successfully");
+    } catch (error) {
+      console.error("❌ KaTeX rendering error:", error);
+    }
+  }
+
+  
+  function renderKatexWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof renderMathInElement === "function") {
+        renderKatex();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ KaTeX auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering KaTeX...");
+        
+        setTimeout(() => renderKatexWithRetry(3, 50), 50);
+      });
+      console.log("✅ KaTeX-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderKatexWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+  
+  window.renderKatex = renderKatex;
+</script>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  let initialized = false;
+
+  function renderMermaid() {
+    const contentArea = document.getElementById('swup') || document.body;
+    const mermaidBlocks = contentArea.querySelectorAll('.language-mermaid, .mermaid');
+
+    if (mermaidBlocks.length === 0) {
+      console.log("ℹ️ No mermaid blocks found on this page");
+      return;
+    }
+
+    if (!initialized) {
+      mermaid.initialize({startOnLoad: false, theme: 'dark'});
+      initialized = true;
+    }
+
+    mermaidBlocks.forEach(el => {
+      if (el.dataset.processed === 'true') {
+        const source = el.dataset.mermaidSource;
+        if (source) {
+          el.innerHTML = source;
+          el.removeAttribute('data-processed');
+        }
+      } else {
+        el.dataset.mermaidSource = el.textContent;
+      }
+    });
+
+    mermaid.run({nodes: mermaidBlocks})
+      .then(() => console.log("✅ Mermaid rendered successfully"))
+      .catch(err => console.error("❌ Mermaid rendering error:", err));
+  }
+
+  function renderMermaidWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof mermaid.initialize === "function") {
+        renderMermaid();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ Mermaid auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering mermaid...");
+        
+        setTimeout(() => renderMermaidWithRetry(3, 50), 50);
+      });
+      console.log("✅ Mermaid-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderMermaidWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+
+
+</script>
+
+
+</head>
+
+<body class="min-h-screen flex flex-col bg-black font-jersey text-white text-3xl">
+  <header>
+    <div class="sticky absolute top-0 z-50">
+  <nav class="w-full border-b border-gray-800 bg-[#070709]/95 backdrop-blur-sm text-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+        
+        <div class="flex items-center gap-3">
+
+          <a id="title" href='/' class="flex items-center gap-3 group" aria-label="Homepage">
+
+            <img src='/img/profile.png' alt="cartoone&#39;s blog"
+              class="w-10 h-10 rounded-sm border-2 border-gray-700 object-cover transition-transform duration-300 transform group-hover:scale-105"
+              style="animation: border-breathe 4s ease-in-out infinite;" />
+            <span class="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-wide">
+              cartoone&#39;s blog
+              <span class="inline-block ml-2" style="animation: flicker 1.6s steps(2, end) infinite;">_</span>
+            </span>
+          </a>
+        </div>
+
+        
+        <div class="flex items-center gap-4">
+          
+          <div class="hidden md:flex items-center">
+            
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a aria-current="true" href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+          </div>
+
+          
+          <div class="md:hidden">
+            <button id="nav-toggle" aria-controls="mobile-menu" aria-expanded="false"
+              class="inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              aria-label="Open menu">
+              <svg class="h-6 w-6 text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      
+      <div id="mobile-menu" class="md:hidden hidden pb-4">
+        
+        
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a aria-current="true" href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+      </div>
+    </div>
+  </nav>
+
+  
+  <style>
+    @keyframes flicker {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      10% {
+        opacity: 0.2;
+        transform: translateY(-1px);
+      }
+
+      20% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes border-breathe {
+      0% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+
+      50% {
+        box-shadow: 0 0 18px 6px rgba(99, 102, 241, 0.03);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+    }
+
+    span{
+      color: green;
+    }
+
+    .undeline{
+      background: green;
+    }
+
+    header nav {
+      border-color: #47562f;
+      background: #1b2013;
+    }
+  </style>
+
+  
+  <script>
+    (function () {
+      const btn = document.getElementById('nav-toggle');
+      const menu = document.getElementById('mobile-menu');
+      if (!btn || !menu) return;
+      btn.addEventListener('click', () => {
+        const open = menu.classList.toggle('hidden') === false;
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
+</div>
+
+  </header>
+
+  <main class="flex-1 w-full">
+    <div id="swup" class="swup-transition-fade">
+      <div class="max-w-3xl lg:max-w-6xl xl:max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-10 lg:py-16">
+        
+<div class="grid grid-cols-12 gap-8">
+  
+  <aside class="hidden lg:block col-span-3">
+    <div class="sticky top-24">
+      <div class="mb-3 text-xs uppercase tracking-widest text-gray-500">Table of contents</div><nav class="toc border border-gray-800/70 bg-[#070709] rounded-sm p-4 text-base text-gray-300">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#projet-et-architecture">Projet et architecture</a></li>
+    <li><a href="#grammaire-et-représentation-intermédiaire">Grammaire et représentation intermédiaire</a></li>
+    <li><a href="#moteur-de-parsing">Moteur de parsing</a></li>
+    <li><a href="#parseur-arithmétique">Parseur arithmétique</a></li>
+    <li><a href="#intrication-avec-le-rust">Intrication avec le Rust</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+      </nav></div>
+  </aside>
+
+  
+  <article class="col-span-12 lg:col-span-9">
+    <header class="mb-6">
+  <h1 class="text-2xl sm:text-3xl md:text-4xl tracking-wide text-white">
+    Calculatrice Rust OCaml
+  </h1>
+
+  <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm sm:text-base text-gray-400">
+    <span class="font-mono">Jun 07, 2026 • 12:42</span>
+    <span class="text-gray-700">/</span>
+    <span class="font-mono">10 min read</span>
+  </div><div class="mt-3 flex flex-wrap gap-2"><a href="/%20tags/programation"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #Programation
+    </a><a href="/%20tags/projet"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #Projet
+    </a></div></header>
+
+
+    
+    <div class="lg:hidden mb-6">
+      <details class="border border-gray-800/70 bg-[#070709] rounded-sm">
+        <summary class="cursor-pointer select-none px-4 py-3 text-gray-200 hover:text-white transition-colors">
+          Table of contents
+        </summary>
+        <div class="px-4 pb-4 toc text-base text-gray-300">
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#projet-et-architecture">Projet et architecture</a></li>
+    <li><a href="#grammaire-et-représentation-intermédiaire">Grammaire et représentation intermédiaire</a></li>
+    <li><a href="#moteur-de-parsing">Moteur de parsing</a></li>
+    <li><a href="#parseur-arithmétique">Parseur arithmétique</a></li>
+    <li><a href="#intrication-avec-le-rust">Intrication avec le Rust</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+        </div>
+      </details>
+    </div>
+
+    <div class="border border-gray-800/70 bg-[#070709] rounded-sm p-5 sm:p-7">
+
+      <div class="md-content text-lg sm:text-xl leading-relaxed text-gray-200">
+        <p>Dans cette note de blog, je vais présenter un projet sur lequel je travaille. Il est très librement inspiré d’une UE que j’ai suivie en L1 en 2024-2025 sur l’analyse syntaxique fonctionnelle, ainsi que de l’article qui a servi de base à ce cours, <em>Monadic Parser Combinators</em> de <em>Graham Hutton</em> et <em>Erik Meijer</em>. Dans cette note, je vais dans un premier temps présenter le projet et son architecture. Ensuite, on décrira la manière dont les parseurs sont construits, pour finir sur la façon dont ces parseurs sont intriqués avec du code Rust pour leur utilisation finale.</p>
+<h2 id="projet-et-architecture" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Projet et architecture
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>Je me suis lancé dans ce projet pour développer des compétences :</p>
+<ul>
+<li>la programmation en OCaml (le cours de L1 était en Idris2)</li>
+<li>la programmation système en Rust (fork de processus)</li>
+<li>revoir le parsing fonctionnel et le pousser plus loin</li>
+</ul>
+<p>Dans cette optique, je me suis imposé comme objectif de développer un shell rudimentaire. Cependant, comme ce projet est très important et afin de ne pas me lancer dans quelque chose de trop ambitieux que je risquerais d’abandonner, j’ai planifié un objectif intermédiaire : la programmation d’une calculatrice.</p>
+<p>Pour mener à bien ce projet, j’ai appliqué la structure suivante :</p>
+<p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/img/Pasted_image_20260505140326.png" loading="lazy" decoding="async"
+  alt=""></p>
+<h2 id="grammaire-et-représentation-intermédiaire" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Grammaire et représentation intermédiaire
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>j’ai commencé par définir la représentation interne en Rust et OCaml :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">rust</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">Expr</span> {
+</span></span><span style="display:flex;"><span>    Number(<span style="color:#66d9ef">i64</span>),
+</span></span><span style="display:flex;"><span>    Add(Box<span style="color:#f92672">&lt;</span>Expr<span style="color:#f92672">&gt;</span>, Box<span style="color:#f92672">&lt;</span>Expr<span style="color:#f92672">&gt;</span>),
+</span></span><span style="display:flex;"><span>    Sub(Box<span style="color:#f92672">&lt;</span>Expr<span style="color:#f92672">&gt;</span>, Box<span style="color:#f92672">&lt;</span>Expr<span style="color:#f92672">&gt;</span>),
+</span></span><span style="display:flex;"><span>    Mul(Box<span style="color:#f92672">&lt;</span>Expr<span style="color:#f92672">&gt;</span>, Box<span style="color:#f92672">&lt;</span>Expr<span style="color:#f92672">&gt;</span>),
+</span></span><span style="display:flex;"><span>    Div(Box<span style="color:#f92672">&lt;</span>Expr<span style="color:#f92672">&gt;</span>, Box<span style="color:#f92672">&lt;</span>Expr<span style="color:#f92672">&gt;</span>),
+</span></span><span style="display:flex;"><span>    Null,
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> expression <span style="color:#f92672">=</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#a6e22e">Val</span> <span style="color:#66d9ef">of</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#a6e22e">Add</span> <span style="color:#66d9ef">of</span> expression <span style="color:#f92672">*</span> expression
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#a6e22e">Sub</span> <span style="color:#66d9ef">of</span> expression <span style="color:#f92672">*</span> expression
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#a6e22e">Mul</span> <span style="color:#66d9ef">of</span> expression <span style="color:#f92672">*</span> expression
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#a6e22e">Div</span> <span style="color:#66d9ef">of</span> expression <span style="color:#f92672">*</span> expression</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>ces deux représentations sont équivalentes et permettent de définir en compréhension des expressions arithmétiques simples.</p>
+<p>pour ce qui est de la version <code>.json</code>, j’ai simplement utilisé des objets définis comme suit :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">json</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{<span style="color:#f92672">&#34;op&#34;</span> : <span style="color:#e6db74">&#34;add&#34;</span>, <span style="color:#f92672">&#34;arg&#34;</span> : [<span style="color:#960050;background-color:#1e0010">&lt;obj&gt;</span>, <span style="color:#960050;background-color:#1e0010">&lt;obj&gt;</span>]}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>où <strong>op</strong> définit l’opérateur et <strong>arg</strong> la liste des arguments qui peuvent être des int ou des expressions.</p>
+<h2 id="moteur-de-parsing" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Moteur de parsing
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>pour les parseurs, je me suis basé, comme indiqué dans l’introduction, sur l’article <em>Monadic Parser Combinators</em> de Graham Hutton et Erik Meijer pour développer mon moteur de parsing. ce modèle est basé sur le type suivant :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#66d9ef">&#39;</span>a parser <span style="color:#f92672">=</span> <span style="color:#66d9ef">string</span> <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">&#39;</span>a <span style="color:#f92672">*</span> <span style="color:#66d9ef">string</span><span style="color:#f92672">)</span> <span style="color:#66d9ef">list</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>Ce type représente une fonction qui prend en entrée une chaîne de caractères et retourne une liste de tuples, avec le premier élément du type du parseur et le deuxième la chaîne restante sous forme de string. Ce choix a été fait pour s’en servir comme une option, avec la possibilité d’avoir plusieurs résultats possibles, mais dans ce projet je ne l’ai pas utilisé : soit le parseur réussit et retourne une liste contenant un unique tuple, soit il échoue et retourne une liste vide.</p>
+<p>On peut donc définir deux parseurs extrêmement basiques :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#75715e">(* ce parseur reussi tout le temps retourant sont argument sans rien consommer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">nom dans l&#39;article : result *)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> pure a <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">fun</span> inp <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">[</span> <span style="color:#f92672">(</span>a<span style="color:#f92672">,</span> inp<span style="color:#f92672">)</span> <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#75715e">(* ce parseur echoue tout le temps
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">nom dans l&#39;article : zero *)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> empty <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">fun</span> <span style="color:#f92672">_</span>inp <span style="color:#f92672">-&gt;</span> []</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>bon, si on ne peut pas consommer de caractère, la puissance de ce modèle de parsing est assez faible. on définit donc un parseur qui consomme un caractère :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#75715e">(* ce parseur consome un caracter et le retourn
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">nom dans l&#39;article : item *)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> item <span style="color:#f92672">:</span> <span style="color:#66d9ef">char</span> parser <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#f92672">-&gt;</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> s <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">[(</span>s<span style="color:#f92672">.[</span>0<span style="color:#f92672">],</span> String.sub s 1 <span style="color:#f92672">(</span>String.length s <span style="color:#f92672">-</span> 1<span style="color:#f92672">))]</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>On a une bonne base, mais il serait intéressant de pouvoir combiner ces parseurs. On va donc commencer par définir le parseur d’enchaînement :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#75715e">(* ce parsuer permet d&#39;enchainer deux parsuer le resultat du premeir est passer en argument au deuxiemme
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">nom dans l&#39;article : bind *)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#f92672">(</span> <span style="color:#f92672">&gt;&gt;=</span> <span style="color:#f92672">)</span> p1 pp2 <span style="color:#f92672">=</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">fun</span> inp <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">match</span> p1 inp <span style="color:#66d9ef">with</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">|</span> [] <span style="color:#f92672">-&gt;</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">|</span> l <span style="color:#f92672">-&gt;</span>  List.concat <span style="color:#f92672">(</span>List.map <span style="color:#f92672">(</span>uncurry pp2<span style="color:#f92672">)</span> l<span style="color:#f92672">)</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>on prend soin d’appliquer le second parseur à tous les résultats potentiels du premier parseur.</p>
+<p>afin de simplifier le développement, on utilise la fonction de binding d’OCaml <a href="https://ocaml.org/manual/5.2/bindingops.html">https://ocaml.org/manual/5.2/bindingops.html</a>:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#75715e">(* alias pour utiliser la syntaxe let&gt;&gt;= *)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">let</span><span style="color:#f92672">&gt;&gt;=)</span> p1 p2 <span style="color:#f92672">=</span> p1 <span style="color:#f92672">&gt;&gt;=</span> p2</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>on définit aussi un alias pour enchaîner des parseurs sans en propager le résultat :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#75715e">(* ce parseur est un equivalent de f &gt;&gt;= k.g ou k est la fonction constent *)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#f92672">(</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#f92672">)</span> p1 p2 <span style="color:#f92672">=</span> p1 <span style="color:#f92672">&gt;&gt;=</span> Fun.const p2
+</span></span><span style="display:flex;"><span><span style="color:#75715e">(* alias pour utiliser la syntaxe let&gt;&gt;= *)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">let</span><span style="color:#f92672">&gt;&gt;)</span> p1 p2 <span style="color:#f92672">=</span> p1 <span style="color:#f92672">&gt;&gt;</span> p2</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>ces parseurs nous permettent de commencer à définir des parseurs intéressants :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#75715e">(* ce parseur consome un caracter et reussis s&#39;il verifie bien une assertion
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">nom dans l&#39;article : sat *)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> sat p <span style="color:#f92672">:</span> <span style="color:#66d9ef">char</span> parser <span style="color:#f92672">=</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">let</span><span style="color:#f92672">&gt;&gt;=</span> c <span style="color:#f92672">=</span> item <span style="color:#66d9ef">in</span> 
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">match</span> p c <span style="color:#66d9ef">with</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> true  <span style="color:#f92672">-&gt;</span> pure c
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> false <span style="color:#f92672">-&gt;</span> empty</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>Ce code donne un exemple de l’utilisation du binding OCaml et constitue un premier parseur vraiment intéressant. Il permet de vérifier qu’un caractère remplit un prédicat.</p>
+<p>On peut dériver de ce parseur le parseur qui reconnaît un caractère particulier :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#75715e">(* ce parseur consome un caracter et reussis s&#39;il est egal a sont argument
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">nom dans l&#39;article : char *)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#66d9ef">char</span> c <span style="color:#f92672">:</span> <span style="color:#66d9ef">char</span> parser <span style="color:#f92672">=</span> sat <span style="color:#f92672">(</span><span style="color:#66d9ef">fun</span> x <span style="color:#f92672">-&gt;</span> c <span style="color:#f92672">==</span> x<span style="color:#f92672">)</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>Afin d’augmenter encore la puissance du schéma, on va définir un opérateur d’alternative. Il permet de tester un parseur et, en cas d’échec, d’appliquer le deuxième (dans le cas où l’on veut faire diverger les résultats, on a la méthode plus, mais dans la mesure où je ne l’utilise pas dans ce projet je ne développerai pas dessus) :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#75715e">(* parsuer concatenation de chois avec prioriter sur le premier *)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#f92672">(</span> <span style="color:#f92672">&lt;|&gt;</span> <span style="color:#f92672">)</span> p1 p2 <span style="color:#f92672">=</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">fun</span> inp <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">match</span> p1 inp <span style="color:#66d9ef">with</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">|</span> [] <span style="color:#f92672">-&gt;</span> p2 inp
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">|</span> result <span style="color:#f92672">-&gt;</span> result</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>on va définir deux opérations : <strong>many</strong>, qui permet d’utiliser un parseur autant de fois qu’il réussit et retourne une liste de résultats, et <strong>some</strong>, qui a le même effet que many mais échoue si le parseur ne peut pas être appliqué au moins une fois (donc many peut réussir en retournant une liste de résultats vide) :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#75715e">(* ces deux parseur repete restpctiment 0 ou n fois et 1 ou n fois le parseur passer en argument
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">nom dans l&#39;article : many et many1 *)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#66d9ef">rec</span> many p <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>  some p <span style="color:#f92672">&lt;|&gt;</span> pure []
+</span></span><span style="display:flex;"><span><span style="color:#f92672">and</span> some p <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">let</span><span style="color:#f92672">&gt;&gt;=</span> x <span style="color:#f92672">=</span> p <span style="color:#66d9ef">in</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">let</span><span style="color:#f92672">&gt;&gt;=</span> xs <span style="color:#f92672">=</span> many p <span style="color:#66d9ef">in</span>
+</span></span><span style="display:flex;"><span>  pure <span style="color:#f92672">(</span>x <span style="color:#f92672">::</span> xs<span style="color:#f92672">)</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>pour définir ces parseurs, on a utilisé une définition mutuellement récursive.</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#75715e">(* Parse une expression de la forme : p (op p)*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">en appliquant les opérateurs de manière associative à gauche.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">nom dans l&#39;article : chainl1 *)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> chainl1 p pop <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">let</span><span style="color:#f92672">&gt;&gt;=</span> x <span style="color:#f92672">=</span> p <span style="color:#66d9ef">in</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">let</span><span style="color:#f92672">&gt;&gt;=</span> fys <span style="color:#f92672">=</span> many <span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span><span style="color:#f92672">&gt;&gt;=</span> f <span style="color:#f92672">=</span> pop <span style="color:#66d9ef">in</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span><span style="color:#f92672">&gt;&gt;=</span> y <span style="color:#f92672">=</span> p   <span style="color:#66d9ef">in</span>
+</span></span><span style="display:flex;"><span>        pure <span style="color:#f92672">(</span>f<span style="color:#f92672">,</span>y<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">)</span> <span style="color:#66d9ef">in</span>
+</span></span><span style="display:flex;"><span>  pure <span style="color:#f92672">(</span>List.fold_left <span style="color:#f92672">(</span><span style="color:#66d9ef">fun</span> a <span style="color:#f92672">(</span>fu<span style="color:#f92672">,</span> b<span style="color:#f92672">)</span> <span style="color:#f92672">-&gt;</span> fu a b<span style="color:#f92672">)</span> x fys<span style="color:#f92672">)</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>ce dernier parseur présenté permet de parser de manière plus simple les clauses d’un opérateur particulier.</p>
+<h2 id="parseur-arithmétique" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Parseur arithmétique
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>bon, la dernière section était assez abstraite, on va passer à des choses un peu plus pratiques. l’objectif de cette section est d’expliquer comment est construit le parseur d’expressions arithmétiques de ce projet.</p>
+<p>dans un premier temps, on va définir un parseur pour parser les nombres entiers :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> digit <span style="color:#f92672">=</span> sat <span style="color:#f92672">(</span><span style="color:#66d9ef">fun</span> c <span style="color:#f92672">-&gt;</span> List.mem c <span style="color:#f92672">[</span><span style="color:#e6db74">&#39;0&#39;</span><span style="color:#f92672">;</span> <span style="color:#e6db74">&#39;1&#39;</span><span style="color:#f92672">;</span> <span style="color:#e6db74">&#39;2&#39;</span><span style="color:#f92672">;</span> <span style="color:#e6db74">&#39;3&#39;</span><span style="color:#f92672">;</span> <span style="color:#e6db74">&#39;4&#39;</span><span style="color:#f92672">;</span> <span style="color:#e6db74">&#39;5&#39;</span><span style="color:#f92672">;</span> <span style="color:#e6db74">&#39;6&#39;</span><span style="color:#f92672">;</span> <span style="color:#e6db74">&#39;7&#39;</span><span style="color:#f92672">;</span> <span style="color:#e6db74">&#39;8&#39;</span><span style="color:#f92672">;</span> <span style="color:#e6db74">&#39;9&#39;</span><span style="color:#f92672">])</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>Ce parseur reconnaît un chiffre.</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> digits <span style="color:#f92672">=</span> some digit</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>Celui-ci reconnaît une série non nulle de chiffres.</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#66d9ef">int</span> <span style="color:#f92672">=</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">let</span><span style="color:#f92672">&gt;&gt;=</span> dig <span style="color:#f92672">=</span> digits <span style="color:#66d9ef">in</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">let</span> toInt <span style="color:#f92672">=</span> <span style="color:#66d9ef">fun</span> x <span style="color:#f92672">-&gt;</span> int_of_string <span style="color:#f92672">(</span>String.of_seq <span style="color:#f92672">(</span>List.to_seq x<span style="color:#f92672">))</span> <span style="color:#66d9ef">in</span>
+</span></span><span style="display:flex;"><span>  pure <span style="color:#f92672">(</span>toInt dig<span style="color:#f92672">)</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>On définit pour finir ce parseur qui permet de reconnaître une chaîne de chiffres et de la convertir en int OCaml.</p>
+<p>On va aussi définir un parseur qui reconnaît un parseur p mis entre parenthèses :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> parentised p <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">char</span> <span style="color:#e6db74">&#39;(&#39;</span> <span style="color:#f92672">&gt;&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">let</span><span style="color:#f92672">&gt;&gt;=</span> v <span style="color:#f92672">=</span> p <span style="color:#66d9ef">in</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">char</span> <span style="color:#e6db74">&#39;)&#39;</span> <span style="color:#f92672">&gt;&gt;</span>
+</span></span><span style="display:flex;"><span>  pure v</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>Pour approcher le parsing d’une expression arithmétique simple, on va commencer par exposer de manière non formelle l’idée derrière le parsing :</p>
+<p><code>une expression arithmétique est un enchaînement de nombres et d’expressions arithmétiques parenthésées séparées par des opérateurs.</code></p>
+<p>cette définition est un bon début, mais lorsqu’on l’implémente de manière naïve elle ne fonctionne pas comme escompté. En effet, elle ne prend pas en compte les priorités opératoires.</p>
+<p>la solution que j’ai choisie pour régler cette subtilité est de reformuler ce qu’est une expression arithmétique :</p>
+<p><code>une expression est un ensemble de clauses f séparées par des opérations + et -. une clause f est définie comme un ensemble de nombres ou d’expressions arithmétiques parenthésées séparées par des opérations * et /.</code></p>
+<p>avec cette définition on peut constater que cette fois-ci les priorités sont correctement définies.</p>
+<p>on essaie de définir cette définition de manière un peu plus formelle :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">text</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>expression = f ((+ | -) f)*
+</span></span><span style="display:flex;"><span>f          = b ((* | /) b)*
+</span></span><span style="display:flex;"><span>b          = nobre | expression prenthese</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>On va maintenant définir ce parseur en OCaml. Il est intéressant de noter que si la définition formelle est bien faite, cette définition peut être extrêmement aisée :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> opSomme <span style="color:#f92672">=</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">char</span> <span style="color:#e6db74">&#39;+&#39;</span> <span style="color:#f92672">&gt;&gt;</span> pure <span style="color:#f92672">(</span><span style="color:#66d9ef">fun</span> a b <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">Add</span> <span style="color:#f92672">(</span>a<span style="color:#f92672">,</span> b<span style="color:#f92672">)))</span> <span style="color:#f92672">&lt;|&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">(</span><span style="color:#66d9ef">char</span> <span style="color:#e6db74">&#39;-&#39;</span> <span style="color:#f92672">&gt;&gt;</span> pure <span style="color:#f92672">(</span><span style="color:#66d9ef">fun</span> a b <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">Sub</span> <span style="color:#f92672">(</span>a<span style="color:#f92672">,</span> b<span style="color:#f92672">)))</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> opFacteur <span style="color:#f92672">=</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">char</span> <span style="color:#e6db74">&#39;*&#39;</span> <span style="color:#f92672">&gt;&gt;</span> pure <span style="color:#f92672">(</span><span style="color:#66d9ef">fun</span> a b <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">Mul</span> <span style="color:#f92672">(</span>a<span style="color:#f92672">,</span> b<span style="color:#f92672">)))</span> <span style="color:#f92672">&lt;|&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">(</span><span style="color:#66d9ef">char</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">&gt;&gt;</span> pure <span style="color:#f92672">(</span><span style="color:#66d9ef">fun</span> a b <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">Div</span> <span style="color:#f92672">(</span>a<span style="color:#f92672">,</span> b<span style="color:#f92672">)))</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>ces deux parseurs définissent des parseurs qui associent un opérateur à une fonction prenant deux arguments et retournant l’objet correspondant à l’application de ces deux objets, l’opération dans le contexte de la représentation OCaml.</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> expr_val <span style="color:#f92672">=</span> <span style="color:#66d9ef">let</span><span style="color:#f92672">&gt;&gt;=</span> v <span style="color:#f92672">=</span> <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">in</span> <span style="color:#f92672">(</span>pure <span style="color:#f92672">(</span><span style="color:#a6e22e">Val</span> v<span style="color:#f92672">))</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>on définit aussi ce parseur simple pour reconnaître les nombres entiers et les convertir dans le contexte de la représentation interne OCaml.</p>
+<p>on peut enfin définir le parseur arithmétique en représentant notre définition formelle.</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#66d9ef">rec</span> somme   input <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>chainl1 facteur opSomme       <span style="color:#f92672">)</span> input
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">and</span> facteur input <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>chainl1 expr    opFacteur     <span style="color:#f92672">)</span> input
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">and</span> expr    input <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>parentised somme <span style="color:#f92672">&lt;|&gt;</span> expr_val <span style="color:#f92672">)</span> input
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> parseur <span style="color:#f92672">=</span> somme</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>On peut ensuite écrire des fonctions basiques pour convertir la représentation interne OCaml en JSON. On fait ensuite en sorte que le programme prenne une string sur son entrée standard et retourne le résultat en JSON sur sa sortie standard.</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">ocaml</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-ocaml" data-lang="ocaml"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> input <span style="color:#f92672">=</span> read_line ()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> () <span style="color:#f92672">=</span> <span style="color:#66d9ef">match</span> AnalyseurArithmetique.parseur input <span style="color:#66d9ef">with</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">(</span>c<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">::</span> <span style="color:#f92672">_</span> <span style="color:#f92672">-&gt;</span> Printf.printf <span style="color:#e6db74">&#34;%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">(</span>AnalyseurArithmetique.jsonify c<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">_</span> <span style="color:#f92672">-&gt;</span> print_endline <span style="color:#e6db74">&#34;{</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">err</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74"> : </span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">error not implement</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74"> }&#34;</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><h2 id="intrication-avec-le-rust" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Intrication avec le Rust
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>dans cette dernière partie on va détailler comment ce code OCaml a été intriqué avec le Rust.</p>
+<p>pour la communication entre les deux programmes on utilise les I/O standard d’un processus lancé comme enfant :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">rust</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">parse_input</span>(input: <span style="color:#66d9ef">&amp;</span>String) -&gt; String {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">PARSER</span>: <span style="color:#66d9ef">&amp;</span><span style="color:#66d9ef">str</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;analyser_syntax_ocamel/analyser/_build/install/default/bin/analyser&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> parser_proces <span style="color:#f92672">=</span> Command::new(<span style="color:#66d9ef">PARSER</span>)
+</span></span><span style="display:flex;"><span>        .stdin(Stdio::piped())
+</span></span><span style="display:flex;"><span>        .stdout(Stdio::piped())
+</span></span><span style="display:flex;"><span>        .spawn()
+</span></span><span style="display:flex;"><span>        .expect(<span style="color:#e6db74">&#34;parser problemme&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> pin <span style="color:#f92672">=</span> parser_proces.stdin.as_mut().unwrap();
+</span></span><span style="display:flex;"><span>    pin.write_all(input.as_bytes()).unwrap();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> pout <span style="color:#f92672">=</span> parser_proces.wait_with_output().unwrap();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> binding <span style="color:#f92672">=</span> String::from_utf8_lossy(<span style="color:#f92672">&amp;</span>pout.stdout);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> output <span style="color:#f92672">=</span> binding.as_ref();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">println!</span>(<span style="color:#e6db74">&#34;Output: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#34;</span>, output);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> output.to_string();
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>on a aussi codé cet évaluateur très basique de la représentation interne Rust qui correspond au json parser issu du parseur OCaml :</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">rust</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:1;-o-tab-size:1;tab-size:1;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">eval</span>(expr: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">Expr</span>) -&gt; <span style="color:#66d9ef">i64</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">match</span> expr {
+</span></span><span style="display:flex;"><span>        Expr::Number(n) <span style="color:#f92672">=&gt;</span> <span style="color:#f92672">*</span>n,
+</span></span><span style="display:flex;"><span>        Expr::Add(a, b) <span style="color:#f92672">=&gt;</span> eval(a) <span style="color:#f92672">+</span> eval(b),
+</span></span><span style="display:flex;"><span>        Expr::Sub(a, b) <span style="color:#f92672">=&gt;</span> eval(a) <span style="color:#f92672">-</span> eval(b),
+</span></span><span style="display:flex;"><span>        Expr::Mul(a, b) <span style="color:#f92672">=&gt;</span> eval(a) <span style="color:#f92672">*</span> eval(b),
+</span></span><span style="display:flex;"><span>        Expr::Div(a, b) <span style="color:#f92672">=&gt;</span> eval(a) <span style="color:#f92672">/</span> eval(b),
+</span></span><span style="display:flex;"><span>        Expr::Null <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><h2 id="conclusion" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Conclusion
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>Ce projet m’a permis de jeter les bases d’une architecture simple pour une application combinant OCaml et Rust afin de réaliser de l’analyse syntaxique. Cette architecture est volontairement minimaliste, car elle a pour objectif principal de préparer le terrain pour un projet plus avancé à venir dans le futur. Il m’a également permis de mieux comprendre la conception de parseurs fonctionnels et l’intérêt de séparer l’analyse syntaxique (OCaml) de l’exécution (Rust), ce qui ouvre la voie à des applications plus complexes comme un shell complet ou un interpréteur.</p>
+
+      </div>
+    </div>
+  </article>
+</div>
+
+<style>
+  .toc {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  .toc li {
+    position: relative;
+    margin: 0.35rem 0;
+    padding-left: 1.25rem;
+     
+    overflow-wrap: anywhere;
+     
+    word-break: break-word;
+  }
+
+  .toc a {
+    display: block;
+     
+    padding: 0.15rem 0;
+    color: rgba(209, 213, 219, 0.92);
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-decoration-color: green;
+    text-underline-offset: 3px;
+  }
+
+   
+  .toc ul ul {
+    margin: 0.4rem 0 0.4rem 0.35rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid rgba(55, 65, 81, 0.6);
+  }
+
+  .toc ul ul>li {
+    padding-left: 1.75rem;
+  }
+
+   
+  .toc ul ul>li::before {
+    content: "├";
+    position: absolute;
+    left: 0.35rem;
+    top: 0.2rem;
+     
+    color: rgba(99, 102, 241, 0.75);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .toc ul ul>li:last-child::before {
+    content: "└";
+  }
+
+   
+  @media (min-width: 1024px) {
+    .toc {
+      max-height: calc(100vh - 9rem);
+      overflow: auto;
+      padding-right: 0.25rem;
+    }
+  }
+
+
+   
+  .md-content ul,
+  .md-content ol {
+    margin: 1rem 0;
+    padding-left: 1.35rem;
+  }
+
+  .md-content ul {
+    list-style: disc;
+  }
+
+  .md-content ul ul {
+    list-style: circle;
+  }
+
+  .md-content ul ul ul {
+    list-style: square;
+  }
+
+  .md-content ol {
+    list-style: decimal;
+  }
+
+  .md-content ol ol {
+    list-style: lower-roman;
+  }
+
+  .md-content ol ol ol {
+    list-style: lower-alpha;
+  }
+
+  .md-content li {
+    margin: 0.35rem 0;
+  }
+
+   
+  .md-content pre,
+  .md-content code {
+    tab-size: 4;
+  }
+</style>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="border-t border-gray-800 bg-[#070709] text-gray-400">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-col md:flex-row items-center justify-between py-6 space-y-4 md:space-y-0">
+
+      
+      <div class="text-sm sm:text-base md:text-lg">
+        <span class="relative inline-block">
+          © 2026 cartoone&#39;s blog. All rights reserved. <br>
+          Made with <a href="https://gohugo.io" target="_blank">Hugo</a> | <a
+            href="https://github.com/Enerhim/enervoid-theme" target="_blank">Enervoid</a>
+        </span>
+      </div>
+
+      
+      <div class="flex items-center space-x-6 text-sm sm:text-base md:text-lg">
+
+        
+        <a href='https://github.com/cartoone222' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-github-original"></i>
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://eldritch.cafe/@cartoone' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="fa-brands fa-mastodon"></i>
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://www.root-me.org/cartoone-222' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="fa-solid fa-user-secret"></i>
+          <span
+            class="undeline absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a rel="me" href="https://eldritch.cafe/@cartoone" style="display:none;">Mastodon</a>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .border-t {
+    border-color: #47562f;
+    background: #1b2013;
+  }
+
+  .undeline{
+    background: green;
+  }
+</style>
+
+  </footer>
+</body>
+
+</html>

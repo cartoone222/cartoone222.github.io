@@ -6,10 +6,17 @@
     <description>Recent content in FCSC on cartoone&#39;s blog</description>
     <generator>Hugo</generator>
     <language>fr-fr</language>
-    <lastBuildDate>Thu, 16 Apr 2026 15:42:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 16 Apr 2026 16:42:00 +0000</lastBuildDate>
     <atom:link href="/tags/fcsc/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Si proche et pourtant si loin</title>
+      <title>FCSC 2026 scampi32</title>
+      <link>/blog/scampi32/</link>
+      <pubDate>Thu, 16 Apr 2026 16:42:00 +0000</pubDate>
+      <guid>/blog/scampi32/</guid>
+      <description>&lt;h2 id=&#34;1---première-analyse&#34; class=&#34;mt-8 mb-3 text-xl sm:text-2xl text-white&#34;&gt;&#xA;    &lt;span class=&#34;relative inline-block&#34;&gt;&#xA;      1 - Première analyse&#xA;      &lt;span&#xA;        class=&#34;absolute left-0 -bottom-1 h-px w-0 bg-indigo-400&#34;&gt;&lt;/span&gt;&#xA;    &lt;/span&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;Ce challenge est basé sur un processeur implémenté en Python, nommé nCPU, mais reste un challenge purement déterministe car aucune seed n’est introduite dans le modèle.&lt;/p&gt;&#xA;&lt;p&gt;La première étape est d’analyser le code fourni. On comprend que le flag va être découpé en 8 parties, qui seront ensuite dispatchées dans les registres de 0 à 7. Le code est désassemblé avant d’être donné au CPU, on va donc en profiter pour l’afficher. On obtient le code suivant :&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>FCSC 2026 Si proche et pourtant si loin</title>
       <link>/blog/si_proche/</link>
       <pubDate>Thu, 16 Apr 2026 15:42:00 +0000</pubDate>
       <guid>/blog/si_proche/</guid>

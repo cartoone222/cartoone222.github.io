@@ -6,8 +6,15 @@
     <description>Recent content on cartoone&#39;s blog</description>
     <generator>Hugo</generator>
     <language>fr-fr</language>
-    <lastBuildDate>Thu, 16 Apr 2026 16:42:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 07 Jun 2026 12:42:00 +0000</lastBuildDate>
     <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Calculatrice Rust OCaml</title>
+      <link>/blog/ocamlrust/</link>
+      <pubDate>Sun, 07 Jun 2026 12:42:00 +0000</pubDate>
+      <guid>/blog/ocamlrust/</guid>
+      <description>&lt;p&gt;Dans cette note de blog, je vais présenter un projet sur lequel je travaille. Il est très librement inspiré d’une UE que j’ai suivie en L1 en 2024-2025 sur l’analyse syntaxique fonctionnelle, ainsi que de l’article qui a servi de base à ce cours, &lt;em&gt;Monadic Parser Combinators&lt;/em&gt; de &lt;em&gt;Graham Hutton&lt;/em&gt; et &lt;em&gt;Erik Meijer&lt;/em&gt;. Dans cette note, je vais dans un premier temps présenter le projet et son architecture. Ensuite, on décrira la manière dont les parseurs sont construits, pour finir sur la façon dont ces parseurs sont intriqués avec du code Rust pour leur utilisation finale.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>FCSC 2026 scampi32</title>
       <link>/blog/scampi32/</link>
